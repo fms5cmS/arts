@@ -16,6 +16,7 @@ func threeSum(nums []int) [][]int {
 	for i := 0; i < len(nums); i++ {
 		l, r := i+1, len(nums)-1
 		target := 0 - nums[i]
+		// 如果第一个数字大于 0，三数之和必大于 0，所以退出
 		if nums[i] > 0 {
 			break
 		}
