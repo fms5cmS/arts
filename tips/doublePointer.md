@@ -10,3 +10,8 @@
     - explore 则在分隔后的某一侧遍历，从而将满足某一条件的数据移动到另一侧
 
 示例：arrayRela/283_moveZeros
+
+- 快慢指针
+    - 用于判断链表是否有环
+
+示例：linkedlistRela/141_hasCycle
