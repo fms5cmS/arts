@@ -9,9 +9,10 @@
     - boundary 作为分界线
     - explore 则在分隔后的某一侧遍历，从而将满足某一条件的数据移动到另一侧
 
-示例：arrayRela/283_moveZeros
+示例：arrayRela/283_moveZeros、linkedlistRela/25_reverseKGroup
 
 - 快慢指针
     - 用于判断链表是否有环
+        - 用于找到链表入环的第一个节点
 
 示例：linkedlistRela/141_hasCycle
