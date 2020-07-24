@@ -9,7 +9,7 @@
     - boundary 作为分界线
     - explore 则在分隔后的某一侧遍历，从而将满足某一条件的数据移动到另一侧
 
-示例：arrayRela/283_moveZeros、linkedlistRela/25_reverseKGroup
+示例：arrayRela/283_moveZeros、arrayRela/26_removeDuplicates、linkedlistRela/25_reverseKGroup
 
 - 快慢指针
     - 用于判断链表是否有环
