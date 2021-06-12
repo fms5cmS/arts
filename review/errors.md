@@ -202,3 +202,9 @@ func TestW(t *testing.T) {
 无论是 `fmt.Errorf()` 还是实现一个自定义的 error 类型，在向其添加额外的内容时，都应考虑这个新的 error 是否要包装一个原始的 error。
 
 `Parse()` 函数要从 `io.Reader` 中读取一个复杂的数据结构，如果产生了错误，我们希望报告错误出现的行号和列号。如果在从 `io.Reader` 中读取时产生错误，
+
+
+
+
+
+kit 库返回的 root error 是否只能在调用 kit 库函数时对 error Wrap 一次，而在最上层对 error 处理，比如打印日志或者返回降级数据，而中间的调用则直接返回 err？比如 A——>B——C——>kit ，只在 C 里对 error Wrap，在 A 中打印日志，而 B 则是 return err
