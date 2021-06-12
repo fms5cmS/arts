@@ -1,11 +1,5 @@
 package treeRela
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 // 中序遍历递归实现
 func inorderTraversal(root *TreeNode) []int {
 	if root == nil {

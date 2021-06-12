@@ -34,23 +34,23 @@ func max(x, y int) int {
 	return y
 }
 
-func largestRectangleArea(heights []int) int {
-	length := len(heights)
-	if length == 0 {
-		return 0
-	}
-	if length == 1 {
-		return heights[0]
-	}
-	ret := 0
-	stack := make([]int, 0)
-	for i := 0; i < length; i++ {
-		for len(stack) != 0 && heights[i] < heights[stack[len(stack)-1]] {
-			curHeight := heights[stack[len(stack)-1]]
-			
-		}
-	}
-}
+// func largestRectangleArea(heights []int) int {
+// 	length := len(heights)
+// 	if length == 0 {
+// 		return 0
+// 	}
+// 	if length == 1 {
+// 		return heights[0]
+// 	}
+// 	ret := 0
+// 	stack := make([]int, 0)
+// 	for i := 0; i < length; i++ {
+// 		for len(stack) != 0 && heights[i] < heights[stack[len(stack)-1]] {
+// 			curHeight := heights[stack[len(stack)-1]]
+//
+// 		}
+// 	}
+// }
 
 func TestLargest(t *testing.T) {
 	nums := []int{2, 1, 5, 6, 2, 3}

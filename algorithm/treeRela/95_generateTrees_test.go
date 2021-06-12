@@ -1,5 +1,6 @@
 package treeRela
 
+// 回溯算法
 func generateTrees(n int) []*TreeNode {
 	if n == 0 {
 		return nil
