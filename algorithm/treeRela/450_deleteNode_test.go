@@ -1,5 +1,10 @@
 package treeRela
 
+import (
+	"fmt"
+	"testing"
+)
+
 func deleteNodeDetail(root *TreeNode, key int) *TreeNode {
 	if root == nil {
 		return nil
@@ -72,7 +77,6 @@ func deleteNodeSimple(root *TreeNode, key int) *TreeNode {
 	return root
 }
 
-
 // 交换节点，而不再是交换节点的值
 func deleteNode(root *TreeNode, key int) *TreeNode {
 	if root == nil {
@@ -97,10 +101,45 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 		// 方法二：用其左子树的最大值替换自身
 		// 交换节点，而不再是交换节点的值！
 		node := root.Right
-		for node.Left != nil {
+		// 找到右子树最小值的父节点
+		for node.Left != nil && node.Left.Left != nil {
 			node = node.Left
 		}
-		node.Left, root = root.Left, root.Right
+		// 将最小值的左右子树设置为 root 原本的左右子树
+		node.Left.Left, node.Left.Right = root.Left, root.Right
+		// 更改 root 指针指向的节点
+		root = node.Left
+		// 将原本右子树最小值的节点从原本的右子树中删除
+		node.Left = nil
+		
+		// 上面代码和这里注释掉的内容区别可以看下面的示例
+		// 将 root 的左子树接到 root 右子树的最小值下
+		// 将 root 替换为原本 root 的右子树
+		// for node.Left != nil {
+		// 	node = node.Left
+		// }
+		// node.Left, root = root.Left, root.Right
 	}
 	return root
+}
+
+//            15
+//    10               20
+// 5      13        18
+//      12   14
+func TestDeleteNode(t *testing.T) {
+	bst := &TreeNode{Val: 15,
+		Left: &TreeNode{Val: 10,
+			Left: &TreeNode{Val: 5},
+			Right: &TreeNode{Val: 13,
+				Left:  &TreeNode{Val: 12,Left: &TreeNode{Val: 11}},
+				Right: &TreeNode{Val: 14}}},
+		Right: &TreeNode{Val: 20,
+			Left: &TreeNode{Val: 18}},
+	}
+	root := deleteNode(bst, 10)
+	treeArr := LevelOrder(root)
+	for _, treeLevelArr := range treeArr {
+		fmt.Println(treeLevelArr)
+	}
 }
