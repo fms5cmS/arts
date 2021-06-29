@@ -14,7 +14,8 @@ type Codec struct {
 	nullStr string
 }
 
-func Constructor() Codec {
+// 原函数名为 Constructor()
+func ConstructorForSerialize() Codec {
 	return Codec{separatorStr: ",", nullStr: "@"}
 }
 
@@ -61,7 +62,7 @@ func TestSerialize(t *testing.T) {
 		Right: &TreeNode{Val: 6,
 			Right: &TreeNode{Val: 7}},
 	}
-	codec := Constructor()
+	codec := ConstructorForSerialize()
 	str := codec.serialize(bst)
 	t.Log(str)
 	t.Log(LevelOrder(codec.deserialize(str)))
