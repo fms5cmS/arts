@@ -6,7 +6,7 @@ DP(Dynamic Programming) 解题步骤：
 4. 确定遍历顺序
 5. 举例推导dp数组
 
-题目：509
+题目：509、518、322
 
 # 背包问题
 
@@ -14,4 +14,3 @@ DP(Dynamic Programming) 解题步骤：
 [01背包-滚动数组](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486624&idx=2&sn=96e8c6344dc25f57462b675b55ccd6e7&scene=21#wechat_redirect)
 [完全背包](https://mp.weixin.qq.com/s/akwyxlJ4TLvKcw26KB9uJw)
 
-518、322
