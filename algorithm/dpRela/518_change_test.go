@@ -31,4 +31,6 @@ func TestChange(t *testing.T) {
 // dp 数组初始化：dp[0] = 1，dp[非零] = 0
 // coin = 1，dp[i] 代表了以 1 组合成各个 i 的个数
 // coin = 2，dp[i] 代表了以 2、1 组合成各个 i 的个数（dp[i-dp[coin]]） + 以 1 组合成各个 i 的个数（dp[i]）
-// coin = 5，dp[i] 代表了以 5、2、1 组合成各个 i 的个数 + 以 2、1 组合成各个 i 的个数
+// coin = 5，dp[i] 代表了以 5、2、1 组合成各个 i 的个数（dp[i-dp[coin]]） + (以 2、1 组合成各个 i 的个数 + 以 1 组合成各个 i 的个数)（dp[i]）
+// 如果是先遍历 amount，再遍历 coins 的话，得到就是排列数（顺序相关）而非组合数（顺序无关），而本题需要的是组合数！
+// 学习自：https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0518.%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II.md
