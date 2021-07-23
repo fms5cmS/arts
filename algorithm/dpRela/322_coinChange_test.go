@@ -2,6 +2,10 @@ package dpRela
 
 import "math"
 
+// 假设 coins 是 [2, 5, 7]，amount 是 27
+// 最少硬币组合 ——> 直觉：
+// 方案一：尽量用面值大的硬币，7 + 7 + 7 + 5 = 26，但没有 1 的硬币
+// 方案二：尽量用面值大的硬币，最后如果可以用一种硬币付清就行， 7 + 7 + 7 + 2 + 2 + 2，但是正确的答案是  7 + 5 + 5 + 5 + 5
 func coinChange(coins []int, amount int) int {
 	// 1. 递推公式：dp[i] 代表凑足金额为 i 所需钱币的最少个数为 dp[i]
 	dp := make([]int, amount+1)

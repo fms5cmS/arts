@@ -1,4 +1,18 @@
-DP(Dynamic Programming) 解题步骤：
+DP(Dynamic Programming) 
+
+# 题目特点
+
+- 计数
+    - 如：多少种方式走到右下角；多少种方法选出 k 个数使得和为 sum
+- 求最大最小值
+    - 如：左上角走到右下角路径的最大数字和；最长上升子序列长度
+- 求存在性
+    - 如：取石子游戏，先手是否必胜；能不能选出 k 个数使得和为 sum
+
+
+
+
+解题步骤：
 
 1. 确定dp数组（dp table）以及下标的含义
 2. 确定递推公式
@@ -17,7 +31,10 @@ DP(Dynamic Programming) 解题步骤：
 
 ## 01 背包
 
-- 题目：416、1049、494
+- 题目：
+    - 正常：416、1049、494
+    - 变体：474（物品的重量有两个维度）
+
 
 [01背包](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486598&idx=1&sn=dd7d0530dd7a5caef7ce70cc3d6eee3f&scene=21#wechat_redirect)
 
@@ -91,6 +108,7 @@ func zeroOneBag(weight, value []int, bagWeight int) int {
 4. 遍历顺序：只能先遍历物品再遍历背包！
 
 ```go
+// 必须是先遍历物品再遍历背包！
 func zeroOneBag(weight, value []int, bagWeight int) int {
 	dp := make([]int, bagWeight+1)
 	for i, w := range weight {
@@ -111,7 +129,7 @@ func zeroOneBag(weight, value []int, bagWeight int) int {
 ```go
 // 正序遍历
 dp[1] = dp[1 - weight[0]] + value[0] = 15
-dp[2] = dp[2 - weight[0]] + value[0] = 15   // 这里下标 0 的物品价值被计算了两次！
+dp[2] = dp[2 - weight[0]] + value[0] = 30   // 这里下标 0 的物品价值被计算了两次！
 // 倒序遍历
 dp[2] = dp[2 - weight[0]] + value[0] = 15
 dp[1] = dp[1 - weight[0]] + value[0] = 15
@@ -125,7 +143,41 @@ dp[1] = dp[1 - weight[0]] + value[0] = 15
 
 ## 完全背包
 
+- 题目：
+    - 变体：518（排列数还是组合数？遍历顺序来决定）
+
 [完全背包](https://mp.weixin.qq.com/s/akwyxlJ4TLvKcw26KB9uJw)
 
+完全背包和01背包问题唯一不同的地方就是，每种物品有无限件，即可以被添加多次，所以在遍历背包的时候需要从小到大的遍历：
+
+```go
+// 先遍历物品后遍历背包
+func wholeBag(weight, value []int, bagWeight int) int {
+	dp := make([]int, bagWeight+1)
+	for i, w := range weight {
+		for j := w; j <= bagWeight; j++ {
+			dp[j] = max(dp[j], dp[j - weight[i]] + value[i])
+		}
+	}
+	return dp[bagWeight]
+}
+```
+
+与 01背包(滚动数组)不同，完全背包中，背包和物品遍历顺序无所谓，除了上面先遍历物品后遍历背包外，还可以先遍历背包后遍历物品：
+
+```go
+// 先遍历背包后遍历物品
+func wholeBag(weight, value []int, bagWeight int) int {
+	dp := make([]int, bagWeight+1)
+    for j := 0; j <= bagWeight; j++ {
+        for i, w := range weight {
+        	if j - w >= 0 {
+                dp[j] = max(dp[j], dp[j - weight[i]] + value[i])
+            }
+        }
+    }
+	return dp[bagWeight]
+}
+```
 
 
