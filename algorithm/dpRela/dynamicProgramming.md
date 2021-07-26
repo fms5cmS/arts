@@ -29,6 +29,8 @@ DP(Dynamic Programming)
 
 # 背包问题
 
+[背包问题总结篇](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E8%83%8C%E5%8C%85%E6%80%BB%E7%BB%93%E7%AF%87.md)
+
 ## 01 背包
 
 - 题目：
@@ -144,7 +146,9 @@ dp[1] = dp[1 - weight[0]] + value[0] = 15
 ## 完全背包
 
 - 题目：
-    - 变体：518（排列数还是组合数？遍历顺序来决定）
+    - 排列数：518、377、[有多少种不同的爬楼梯方法？](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0070.%E7%88%AC%E6%A5%BC%E6%A2%AF%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E7%89%88%E6%9C%AC.md)、322
+    - 组合数：279
+    - 特殊：139
 
 [完全背包](https://mp.weixin.qq.com/s/akwyxlJ4TLvKcw26KB9uJw)
 
@@ -180,4 +184,7 @@ func wholeBag(weight, value []int, bagWeight int) int {
 }
 ```
 
+**如果求组合数就是外层for循环遍历物品，内层for遍历背包。**
+
+**如果求排列数就是外层for遍历背包，内层for循环遍历物品。**
 
