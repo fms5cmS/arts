@@ -1,4 +1,4 @@
-package arrayRela
+package binarySearch
 
 // 二分法，类比 875
 func shipWithinDays(weights []int, days int) int {

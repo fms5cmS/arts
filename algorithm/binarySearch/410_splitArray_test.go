@@ -1,4 +1,4 @@
-package arrayRela
+package binarySearch
 
 //「使……最大值尽可能小」是二分搜索题目常见的问法。
 // 使用二分法：

@@ -1,4 +1,4 @@
-package arrayRela
+package binarySearch
 
 import (
 	"fmt"
