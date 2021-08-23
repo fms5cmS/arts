@@ -26,6 +26,22 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	return dummy.Next
 }
 
+// 原理同上
+func removeNthFromEnd2(head *ListNode, n int) *ListNode {
+	dummy := &ListNode{Val: 0, Next: head}
+	pre, cur := dummy, head
+	i := 1
+	for cur != nil {
+		cur = cur.Next
+		if i > n {
+			pre = pre.Next
+		}
+		i++
+	}
+	pre.Next = pre.Next.Next
+	return dummy.Next
+}
+
 func TestRemoveNthFromEnd(t *testing.T) {
 	list := &ListNode{
 		Val: 1, Next: &ListNode{
@@ -40,6 +56,6 @@ func TestRemoveNthFromEnd(t *testing.T) {
 			},
 		},
 	}
-	a := removeNthFromEnd(list, 2)
+	a := removeNthFromEnd(list, 7)
 	fmt.Println(a.String())
 }

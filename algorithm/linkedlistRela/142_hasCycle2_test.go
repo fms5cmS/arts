@@ -1,5 +1,6 @@
 package linkedlistRela
 
+// 数学证明：https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.md
 func detectCycle(head *ListNode) *ListNode {
 	// 链表长度为 0 或 1 时无环
 	if head == nil || head.Next == nil {
