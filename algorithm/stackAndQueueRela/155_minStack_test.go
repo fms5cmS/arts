@@ -1,4 +1,4 @@
-package stackRela
+package stackAndQueueRela
 
 // 155. 最小栈：设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
 type MinStack struct {
@@ -8,7 +8,7 @@ type MinStack struct {
 	data,min  []int
 }
 
-func Constructor() MinStack {
+func ConstructorMinStack() MinStack {
 	return MinStack{
 		data: make([]int, 0),
 		min:  make([]int, 0),

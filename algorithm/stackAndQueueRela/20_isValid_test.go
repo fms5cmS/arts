@@ -1,4 +1,4 @@
-package stackRela
+package stackAndQueueRela
 
 func isValid(s string) bool {
 	mem := map[rune]rune{

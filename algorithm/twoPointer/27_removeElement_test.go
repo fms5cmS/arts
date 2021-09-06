@@ -1,4 +1,4 @@
-package arrayRela
+package twoPointer
 
 func removeElement(nums []int, val int) int {
 	slow, fast := 0, 0
