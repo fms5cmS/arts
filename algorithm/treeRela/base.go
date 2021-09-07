@@ -46,11 +46,11 @@ func LevelOrder(root *TreeNode) [][]int {
 	return ret
 }
 
-type Node struct {
+type ConnectNode struct {
 	Val   int
-	Left  *Node
-	Right *Node
-	Next  *Node
+	Left  *ConnectNode
+	Right *ConnectNode
+	Next  *ConnectNode
 }
 
 func getIndex(nums []int, target int) int {
@@ -60,4 +60,10 @@ func getIndex(nums []int, target int) int {
 		}
 	}
 	return -1
+}
+
+// N叉树的节点
+type Node struct {
+	Val      int
+	Children []*Node
 }
