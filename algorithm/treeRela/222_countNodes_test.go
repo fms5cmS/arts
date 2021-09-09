@@ -1,5 +1,24 @@
 package treeRela
 
+// 后序遍历
+func countNodesByRecursion(root *TreeNode) int {
+	return getNodeNum(root)
+}
+
+func getNodeNum(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	leftNum := getNodeNum(root.Left)   // 左
+	rightNum := getNodeNum(root.Right) // 右
+	treeNum := leftNum + rightNum + 1  // 中
+	return treeNum
+}
+
+// 利用了完全二叉树的性质
+// 完全二叉树只有两种情况：
+// 情况一，就是满二叉树。可以用 2^深度-1 计算，注意，根节点深度为 1
+// 情况二，最后一层叶子节点没有满。分别递归左孩子，和右孩子，递归到某一深度一定会有左孩子或者右孩子为满二叉树，然后依然可以按照情况1来计算。
 func countNodes(root *TreeNode) int {
 	if root == nil {
 		return 0
@@ -25,10 +44,4 @@ func countNodes(root *TreeNode) int {
 	return countNodes(root.Left) + countNodes(root.Right) + 1
 }
 
-func countNodes_Easy(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
-	// 后序遍历
-	return 1 + countNodes(root.Left) + countNodes(root.Right)
-}
+// 非递归的方式可以使用层序遍历
