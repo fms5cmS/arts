@@ -10,7 +10,7 @@ package graphRela
 func allPathsSourceTarget(graph [][]int) [][]int {
 	rs := make([][]int, 0)
 	var dfs func(int, int, []int)
-	
+
 	dfs = func(cur int, end int, path []int) {
 		// 走到了终点
 		if cur == end {
@@ -24,7 +24,7 @@ func allPathsSourceTarget(graph [][]int) [][]int {
 			dfs(graph[cur][i], end, append(path, cur))
 		}
 	}
-	
+
 	dfs(0, len(graph)-1, []int{}) // 当前节点
 	return rs
 }

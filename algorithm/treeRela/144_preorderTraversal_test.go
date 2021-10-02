@@ -20,7 +20,7 @@ func PreorderTraversal(root *TreeNode) []int {
 	if root != nil {
 		stack = append(stack, root)
 	}
-	for len(stack) > 0{
+	for len(stack) > 0 {
 		cur := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
 		if cur != nil {

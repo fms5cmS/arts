@@ -6,7 +6,7 @@ func averageOfLevels(root *TreeNode) []float64 {
 	if root != nil {
 		queue = append(queue, root)
 	}
-	for len(queue) > 0{
+	for len(queue) > 0 {
 		size := len(queue)
 		sum := 0
 		for i := 0; i < size; i++ {
@@ -24,4 +24,3 @@ func averageOfLevels(root *TreeNode) []float64 {
 	}
 	return result
 }
-

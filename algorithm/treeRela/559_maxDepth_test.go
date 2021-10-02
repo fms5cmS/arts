@@ -15,5 +15,5 @@ func maxDepthForNTree(root *Node) int {
 	for _, child := range root.Children {
 		depth = max(depth, maxDepthForNTree(child))
 	}
-	return depth+1
+	return depth + 1
 }

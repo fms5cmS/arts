@@ -31,7 +31,7 @@ func removeDuplicates_slow(nums []int) int {
 }
 
 func TestRemoveDuplicates(t *testing.T) {
-	nums := []int{0,0,1,1,1,2,2,3,3,4}
+	nums := []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}
 	i := removeDuplicates(nums)
 	t.Log(i)
 	t.Log(nums[0:i])

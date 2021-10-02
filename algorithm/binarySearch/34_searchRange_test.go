@@ -110,7 +110,7 @@ func getLast2(nums []int, target int) int {
 			right = mid
 		}
 	}
-	return right-1
+	return right - 1
 }
 
 func TestGetFirst(t *testing.T) {

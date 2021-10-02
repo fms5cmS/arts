@@ -115,15 +115,15 @@ func (this *MyLinkedList) DeleteAtIndex(index int) {
 func TestMyLinkedList(t *testing.T) {
 	list := Constructor()
 	list.AddAtHead(1)
-	fmt.Println(list.String())  // 1
+	fmt.Println(list.String()) // 1
 	list.AddAtTail(3)
-	fmt.Println(list.String())  //  1 -> 3
+	fmt.Println(list.String()) //  1 -> 3
 	list.AddAtIndex(1, 2)
-	fmt.Println(list.String())   // 1 -> 2 -> 3
-	fmt.Println(list.Get(1)) // 2
+	fmt.Println(list.String()) // 1 -> 2 -> 3
+	fmt.Println(list.Get(1))   // 2
 	list.DeleteAtIndex(1)
-	fmt.Println(list.String())  // 1 - > 3
-	fmt.Println(list.Get(1)) // 3
+	fmt.Println(list.String()) // 1 - > 3
+	fmt.Println(list.Get(1))   // 3
 }
 
 func TestMyLinkedList2(t *testing.T) {

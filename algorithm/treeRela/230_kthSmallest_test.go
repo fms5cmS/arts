@@ -32,7 +32,7 @@ var (
 	// 保存最后的结果
 	target int
 	// 记录遍历的节点个数
-	count  int
+	count int
 )
 
 func kthSmallest2(root *TreeNode, k int) int {

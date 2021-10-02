@@ -12,7 +12,7 @@ func wordBreak(s string, wordDict []string) bool {
 	// 先遍历背包后遍历物品
 	for i := 1; i <= len(s); i++ {
 		for j := 0; j < i; j++ {
-			word := s[j : i]
+			word := s[j:i]
 			if wordSet[word] && dp[j] {
 				dp[i] = true
 				break

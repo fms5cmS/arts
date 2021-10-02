@@ -24,5 +24,5 @@ func findContentChildren(g []int, s []int) int {
 }
 
 func Test455(t *testing.T) {
-	fmt.Println(findContentChildren([]int{1,2,3}, []int{1,1}))
+	fmt.Println(findContentChildren([]int{1, 2, 3}, []int{1, 1}))
 }

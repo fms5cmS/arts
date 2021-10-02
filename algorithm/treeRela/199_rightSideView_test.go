@@ -13,7 +13,7 @@ func rightSideView(root *TreeNode) []int {
 		for i := 0; i < size; i++ {
 			cur := queue[0]
 			queue = queue[1:]
-			if i == size -1 {
+			if i == size-1 {
 				result = append(result, cur.Val)
 			}
 			if cur.Left != nil {

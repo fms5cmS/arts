@@ -47,7 +47,6 @@ func InorderTraversal(root *TreeNode) []int {
 	return result
 }
 
-
 // 中序遍历非递归实现，相当于自己模拟了一个栈
 func inorderTraversalNotRecursion(root *TreeNode) []int {
 	ret := make([]int, 0)

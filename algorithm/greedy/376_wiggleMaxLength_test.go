@@ -28,7 +28,7 @@ func wiggleMaxLength2(nums []int) int {
 	i := 1
 	// 找到第一个差值不为 0 的元素
 	for ; i < len(nums); i++ {
-		preDiff = nums[i]- nums[i-1]
+		preDiff = nums[i] - nums[i-1]
 		if preDiff != 0 {
 			// 这里注意 result 需要加一
 			result++
@@ -36,8 +36,8 @@ func wiggleMaxLength2(nums []int) int {
 		}
 	}
 	for ; i < len(nums)-1; i++ {
-		curDiff = nums[i+1]-nums[i]
-		if curDiff*preDiff< 0 {
+		curDiff = nums[i+1] - nums[i]
+		if curDiff*preDiff < 0 {
 			result++
 			preDiff = curDiff
 		}

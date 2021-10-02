@@ -55,7 +55,7 @@ func largestSumAfterKNegations2(nums []int, k int) int {
 }
 
 func TestLargestSumAfterKNegation(t *testing.T) {
-	nums := []int{3, -1, 0, 2}  // k = 3, sum =
+	nums := []int{3, -1, 0, 2} // k = 3, sum =
 	//nums := []int{4, 2, 3} // k = 1sum = 5
 	//nums := []int{2, -3, -1, 5, -4} // 2
 	fmt.Println(largestSumAfterKNegations2(nums, 3))

@@ -7,7 +7,7 @@ import "testing"
 // 					n,   0 < n < 3
 // f(n) =   0,   n < 0
 // 					f(n-1) + f(n-2),  n > 3
-func climbStairs(n int) int {  // n 是给定的正整数
+func climbStairs(n int) int { // n 是给定的正整数
 	if n <= 2 {
 		return n
 	}

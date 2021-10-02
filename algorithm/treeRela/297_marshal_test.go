@@ -37,7 +37,7 @@ func (this *Codec) deserialize(data string) *TreeNode {
 }
 
 // 注意：这里的 strs 必须是切片的指针，以保证代码中 root.Left 取出一个字符处理后，后续 root.Right 不会重复处理
-func (this *Codec)buildTreeByDeserialize(strs *[]string) *TreeNode {
+func (this *Codec) buildTreeByDeserialize(strs *[]string) *TreeNode {
 	val := (*strs)[0]
 	*strs = (*strs)[1:]
 	if val == this.nullStr {

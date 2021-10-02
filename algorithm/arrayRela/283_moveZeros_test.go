@@ -11,7 +11,7 @@ func moveZeroes(nums []int) {
 			nums[boundary], nums[explore] = nums[explore], nums[boundary]
 			boundary++
 			explore++
-		}else {
+		} else {
 			explore++
 		}
 	}
