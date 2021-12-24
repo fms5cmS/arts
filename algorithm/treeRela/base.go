@@ -46,9 +46,50 @@ func LevelOrder(root *TreeNode) [][]int {
 	return ret
 }
 
-type Node struct {
+func ConstructTreeByLevelOrder(levelVals []interface{}) *TreeNode {
+	if len(levelVals) == 0 {
+		return nil
+	}
+	nodes := make([]*TreeNode, len(levelVals))
+	var root *TreeNode
+	// 1. 数值数组转为节点数组（线性存储结构）
+	for i, val := range levelVals {
+		if val != nil {
+			nodes[i] = &TreeNode{Val: val.(int)}
+		} else {
+			nodes[i] = nil
+		}
+	}
+	// 最开始已经对空数组做了处理，所以走到这里的话 nodes 的长度一定是大于 0 的！
+	root = nodes[0]
+	// 2. 拼接树：线性存储结构转链式存储结构，因为最大要用 i*2+2 的索引下标，所以需要以此作为判断条件防止下标越界
+	for i := 0; i*2+2 < len(levelVals); i++ {
+		if nodes[i] != nil {
+			nodes[i].Left = nodes[i*2+1]
+			nodes[i].Right = nodes[i*2+2]
+		}
+	}
+	return root
+}
+
+type ConnectNode struct {
 	Val   int
-	Left  *Node
-	Right *Node
-	Next  *Node
+	Left  *ConnectNode
+	Right *ConnectNode
+	Next  *ConnectNode
+}
+
+func getIndex(nums []int, target int) int {
+	for i, num := range nums {
+		if num == target {
+			return i
+		}
+	}
+	return -1
+}
+
+// N叉树的节点
+type Node struct {
+	Val      int
+	Children []*Node
 }

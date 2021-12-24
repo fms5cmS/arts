@@ -1,4 +1,4 @@
-package stackRela
+package stackAndQueueRela
 
 import "testing"
 
