@@ -26,10 +26,35 @@ func trimBST(root *TreeNode, low int, high int) *TreeNode {
 	return root
 }
 
-
-//func trimBSTNotRecursion(root *TreeNode, low int, high int) *TreeNode {
-//	if root == nil {
-//		return nil
-//	}
-//	for root != nil
-//}
+// 迭代
+func trimBSTNotRecursion(root *TreeNode, low int, high int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	// 当前节点不在区间内
+	for root != nil && (root.Val < low || root.Val > high) {
+		if root.Val < low { // 当前节点的左子树不符合
+			root = root.Right
+		} else { // 当前节点的右子树不符合
+			root = root.Left
+		}
+	}
+	// 当前节点在区间内
+	// 处理其左子树中不符合区间条件的节点
+	cur := root
+	for cur != nil {
+		for cur.Left != nil && cur.Left.Val < low {
+			cur.Left = cur.Left.Right
+		}
+		cur = cur.Left
+	}
+	// 处理其右子树中不符合区间条件的节点，注意，这里需要将 cur 重置
+	cur = root
+	for cur != nil {
+		for cur.Right != nil && cur.Right.Val > high {
+			cur.Right = cur.Right.Left
+		}
+		cur = cur.Right
+	}
+	return root
+}
