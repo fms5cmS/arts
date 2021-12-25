@@ -22,3 +22,26 @@ func convertBST(root *TreeNode) *TreeNode {
 	walk(root)
 	return root
 }
+
+func convertBSTNotRecursion(root *TreeNode) *TreeNode {
+	// 记录前一个节点的值
+	pre := 0
+	traversal := func(root *TreeNode) {
+		stack := make([]*TreeNode, 0)
+		cur := root
+		for cur != nil || len(stack) > 0 {
+			if cur != nil {
+				stack = append(stack, cur)
+				cur = cur.Right
+			} else {
+				cur = stack[len(stack)-1]
+				stack = stack[:len(stack)-1]
+				cur.Val += pre
+				pre = cur.Val
+				cur = cur.Left
+			}
+		}
+	}
+	traversal(root)
+	return root
+}
