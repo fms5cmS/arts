@@ -1,5 +1,6 @@
 package treeRela
 
+// BST 的题目，可以看作是对有序数组的操作，也就是对有序数组从后往前累加
 // BST 的中序遍历是升序的，那么反过来遍历得到的就是降序的
 // 先遍历右子树后遍历根节点再遍历左子树
 func convertBST(root *TreeNode) *TreeNode {

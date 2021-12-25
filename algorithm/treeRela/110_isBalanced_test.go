@@ -3,10 +3,7 @@ package treeRela
 import "math"
 
 func isBalanced(root *TreeNode) bool {
-	if getHeight(root) == -1 {
-		return false
-	}
-	return true
+	return getHeight(root) != -1
 }
 
 func getHeight(root *TreeNode) int {

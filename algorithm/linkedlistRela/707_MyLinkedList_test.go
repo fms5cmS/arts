@@ -47,7 +47,8 @@ func (this *MyLinkedList) Get(index int) int {
 	return cur.Val
 }
 
-/** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
+// Add a node of value val before the first element of the linked list. After the insertion,
+// the new node will be the first node of the linked list.
 func (this *MyLinkedList) AddAtHead(val int) {
 	beforeHead := this.dummyHead.Next
 	newHead := &MyListNode{Val: val, Next: beforeHead}
@@ -65,7 +66,9 @@ func (this *MyLinkedList) AddAtTail(val int) {
 	this.size++
 }
 
-/** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
+// Add a node of value val before the index-th node in the linked list.
+// If index equals to the length of linked list, the node will be appended to the end of linked list.
+// If index is greater than the length, the node will not be inserted.
 func (this *MyLinkedList) AddAtIndex(index int, val int) {
 	if index == this.size {
 		this.AddAtTail(val)

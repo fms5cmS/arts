@@ -40,7 +40,6 @@ func pathSum(root *TreeNode, targetSum int) [][]int {
 			// 回溯
 			count += cur.Right.Val
 		}
-		return
 	}
 	path = append(path, root.Val)
 	traversal(root, targetSum-root.Val, path)
