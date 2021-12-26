@@ -1,10 +1,13 @@
 # 遍历
 
-[二叉树的统一迭代法](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%B3%95.md)
-
 - 前序（递归+非递归实现）：144
 - 中序（递归+非递归实现）：94
 - 后序（递归+非递归实现）：145
+
+递归方法，只要实现了一种遍历方式，其他两种只要修改一下节点顺序就好了；
+
+而迭代方法，使用栈时，由于遍历节点的顺序和节点入栈顺序不一致，所以不易写出统一风格的代码。要写出统一风格的代码，见：[二叉树的统一迭代法](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%B3%95.md)
+
 - 层序遍历（非递归实现）：
     - 102, 107, 199, 637, 429, 515, 116, 117, 104, 111
     - 662
