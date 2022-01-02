@@ -25,7 +25,7 @@ func combine(n int, k int) [][]int {
 		for i := startValue; i <= n; i++ {
 			path = append(path, i)
 			// 递归函数用来从未被使用过的值（就需要用到 startValue 了）中找下一个值
-			backtracking(i+1)
+			backtracking(i + 1)
 			path = path[:len(path)-1] // 回溯，撤回上一步处理的值
 		}
 	}

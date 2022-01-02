@@ -28,7 +28,7 @@ func partition(s string) [][]string {
 		}
 		for i := startIndex; i < len(s); i++ {
 			if isPalindrome(s, startIndex, i) {
-				subStr := s[startIndex:i+1] // 注意这里是 i+1
+				subStr := s[startIndex : i+1] // 注意这里是 i+1
 				path = append(path, subStr)
 			} else {
 				continue
