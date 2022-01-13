@@ -1,3 +1,11 @@
+# Eliminate error handling by eliminating errors
+
+通过消除 error 来消除 error 处理。
+
+原文地址：[Eliminate error handling by eliminating errors](https://dave.cheney.net/2019/01/27/eliminate-error-handling-by-eliminating-errors)
+
+[代码示例](./examples/eliminate_error_test.go)
+
 # Errors are values
 
 原文地址：[Errors are values](https://blog.golang.org/errors-are-values)
@@ -52,6 +60,12 @@ func test(){
 ```
 
 这种方法有一个显著的缺点：对于一些应用而言，我们**无从得知在 error 产生之前完成了多少处理**。如果这一信息很重要，就需要更细粒度的方法了。不过，通常而言，在末尾处进行一次全部完成或全部未完成的检查就足够了。
+
+# github.com/pkg/errors 的使用！
+
+https://pkg.go.dev/github.com/pkg/errors
+
+[代码示例](./examples/wrap_error_test.go)
 
 # Working with Errors in Go 1.13
 
