@@ -6,14 +6,14 @@ func removeDuplicates(nums []int) int {
 	if len(nums) < 2 {
 		return len(nums)
 	}
-	boundary, explore := 1, 1
-	for ; explore < len(nums); explore++ {
-		if nums[explore] != nums[explore-1] {
-			nums[boundary] = nums[explore]
-			boundary++
+	index, move := 0, 1
+	for ; move < len(nums); move++ {
+		if nums[move] != nums[index] {
+			nums[index+1] = nums[move]
+			index++
 		}
 	}
-	return boundary
+	return index+1
 }
 
 func removeDuplicates_slow(nums []int) int {

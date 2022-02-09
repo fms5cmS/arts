@@ -18,6 +18,7 @@ func climbStairs(n int) int {
 	if n <= 1 {
 		return n
 	}
+	// 爬到第 i 层楼梯，有 dp[i] 种方法
 	dp := [3]int{0, 1, 2}
 	for i := 3; i <= n; i++ {
 		dp[1], dp[2] = dp[2], dp[1]+dp[2]

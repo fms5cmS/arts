@@ -13,29 +13,31 @@ import (
 func threeSum(nums []int) [][]int {
 	sort.Ints(nums)
 	result := make([][]int, 0)
-	for i := 0; i < len(nums); i++ {
-		l, r := i+1, len(nums)-1
-		target := 0 - nums[i]
-		// 如果第一个数字大于 0，三数之和必大于 0，所以退出
-		if nums[i] > 0 {
+	for i, a := range nums {
+		// nums 已按升序排列，如果 a > 0，三数之和必大于 0，所以退出
+		if a > 0 {
 			break
 		}
-		if i == 0 || nums[i] != nums[i-1] {
-			for l < r {
-				if nums[l]+nums[r] == target {
-					result = append(result, []int{nums[i], nums[l], nums[r]})
-					for l < r && nums[l] == nums[l+1] {
-						l++
-					}
-					for l < r && nums[r] == nums[r-1] {
-						r--
-					}
-					l++
-					r--
-				} else if nums[l]+nums[r] < target {
-					l++
+		left, right := i+1, len(nums)-1
+		if i == 0 || nums[i] != nums[i-1] { // 对 a 去重！
+			for left < right {
+				b, c := nums[left], nums[right]
+				if a+b+c > 0 {
+					right--
+				} else if a+b+c < 0 {
+					left++
 				} else {
-					r--
+					// 符合条件的添加进结果中
+					result = append(result, []int{a, b, c})
+					// 对 b 和 c 各自去重
+					for left < right && nums[left] == nums[left+1] {
+						left++
+					}
+					left++
+					for left < right && nums[right] == nums[right-1] {
+						right--
+					}
+					right--
 				}
 			}
 		}
