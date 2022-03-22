@@ -1,4 +1,4 @@
-package examples
+package concurrencyPatterns
 
 type Conn interface {
 	DoQuery(query string) Result

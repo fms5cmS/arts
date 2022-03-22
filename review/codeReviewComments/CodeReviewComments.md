@@ -2,7 +2,7 @@
 
 一般而言，如果类型 `T` 的方法与其指针类型 `*T` 相关联，要避免对 `T` 类型的对象的复制。
 
-math/rand 实现了一个伪随机数生成器，如果不指定 seed 的话，生成的数是完全可预测的，即使使用 time.Now().UnixNano() 作为 seed，there are just a few bit of entropy(熵)；crypto/rand 则实现了一个加密的安全随机数生成器。如果要利用随机数生成器来生成 keys，建议使用 crypto/rand 包下的 Reader。见 [rand_test](./examples/rand_test.go)
+math/rand 实现了一个伪随机数生成器，如果不指定 seed 的话，生成的数是完全可预测的，即使使用 time.Now().UnixNano() 作为 seed，there are just a few bit of entropy(熵)；crypto/rand 则实现了一个加密的安全随机数生成器。如果要利用随机数生成器来生成 keys，建议使用 crypto/rand 包下的 Reader。见 [rand_test](./rand_test.go)
 
 空切片的声明：如果要生成空切片，推荐使用 `var s1 []string` 的方式，而不是 `s2 := []string{}`！
 

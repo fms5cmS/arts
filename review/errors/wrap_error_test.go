@@ -1,4 +1,4 @@
-package examples
+package errors
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ func TestWrapError(t *testing.T) {
 	if err != nil {
 		fmt.Printf("original error: %T -> %v\n", errors.Cause(err), errors.Cause(err))
 		// 也可以打印 err.Error()
-		fmt.Printf("withMessage : %s\n",err)
+		fmt.Printf("withMessage : %s\n", err)
 		// 注意：这里使用 %+v 的方式来打印堆栈信息
 		fmt.Printf("stack trace: \n%+v\n", err)
 		os.Exit(1)

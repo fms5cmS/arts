@@ -1,4 +1,4 @@
-package examples
+package errors
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package examples
+package codeReviewComments
 
 import (
 	"crypto/rand"

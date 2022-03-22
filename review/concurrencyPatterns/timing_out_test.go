@@ -1,4 +1,4 @@
-package examples
+package concurrencyPatterns
 
 import (
 	"testing"

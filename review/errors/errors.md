@@ -4,7 +4,7 @@
 
 原文地址：[Eliminate error handling by eliminating errors](https://dave.cheney.net/2019/01/27/eliminate-error-handling-by-eliminating-errors)
 
-[代码示例](./examples/eliminate_error_test.go)
+[代码示例](./eliminate_error_test.go)
 
 # Errors are values
 
@@ -42,7 +42,7 @@ for {
 
  `Scanner` 的这种处理很简单，不同于到处写 `if err!=nil` 或要求用户在每个 token 后检查错误。这正是对 error 值的编程！示例：
 
-![](../images/err_1.png)
+![](../../images/err_1.png)
 
 实际上，这种模式在标准库中很常见，如 `archive/zip` 和 `net/http` 都用到了。而 `bufio` 包的 `Writer` 类型实际就是上面 `errWriter` 思想的实现，尽管其 `Write()` 方法返回了一个 error，这是为了实现了 `io.Writer` 接口，该方法的行为就像上面示例中的 `errWriter.Write()` 方法那样，再通过 `Flush()` 来报告 error：
 
@@ -65,7 +65,7 @@ func test(){
 
 https://pkg.go.dev/github.com/pkg/errors
 
-[代码示例](./examples/wrap_error_test.go)
+[代码示例](./wrap_error_test.go)
 
 # Working with Errors in Go 1.13
 
@@ -216,9 +216,6 @@ func TestW(t *testing.T) {
 无论是 `fmt.Errorf()` 还是实现一个自定义的 error 类型，在向其添加额外的内容时，都应考虑这个新的 error 是否要包装一个原始的 error。
 
 `Parse()` 函数要从 `io.Reader` 中读取一个复杂的数据结构，如果产生了错误，我们希望报告错误出现的行号和列号。如果在从 `io.Reader` 中读取时产生错误，
-
-
-
 
 
 kit 库返回的 root error 是否只能在调用 kit 库函数时对 error Wrap 一次，而在最上层对 error 处理，比如打印日志或者返回降级数据，而中间的调用则直接返回 err？比如 A——>B——C——>kit ，只在 C 里对 error Wrap，在 A 中打印日志，而 B 则是 return err
