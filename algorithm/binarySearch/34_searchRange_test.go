@@ -1,7 +1,7 @@
 package binarySearch
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -12,69 +12,15 @@ func searchRange(nums []int, target int) []int {
 	if target < nums[0] || target > nums[len(nums)-1] {
 		return []int{-1, -1}
 	}
-	// 找第一个位置
-	left1, right1 := 0, len(nums)
-	for left1 < right1 {
-		mid := left1 + (right1-left1)>>1
-		if nums[mid] >= target {
-			right1 = mid
-		} else {
-			left1 = mid + 1
-		}
-	}
-	first := right1
-	// 找最后一个位置
-	left2, right2 := 0, len(nums)-1
-	for left2 <= right2 {
-		mid := left2 + (right2-left2)>>1
-		if nums[mid] <= target {
-			left2 = mid + 1
-		} else {
-			right2 = mid - 1
-		}
-	}
-	last := right2
-	if first > last {
+	left, right := getLeft(nums, target), getRight(nums, target)
+	if left > right {
 		return []int{-1, -1}
 	}
-	return []int{first, last}
+	return []int{left, right}
 }
 
-func TestSearchRange(t *testing.T) {
-	fmt.Println(searchRange2([]int{5, 7, 7, 8, 8, 8, 10}, 8))
-	//fmt.Println(searchRange2([]int{1}, 1))
-}
-
-func searchRange2(nums []int, target int) []int {
-	if len(nums) == 0 {
-		return []int{-1, -1}
-	}
-	if target < nums[0] || target > nums[len(nums)-1] {
-		return []int{-1, -1}
-	}
-	first := getFirst2(nums, target)
-	last := getLast2(nums, target)
-	if first > last {
-		return []int{-1, -1}
-	}
-	return []int{first, last}
-}
-
-// 这里可以参考 35
-func getFirst(nums []int, target int) int {
-	left, right := 0, len(nums)-1
-	for left <= right {
-		mid := left + (right-left)>>1
-		if nums[mid] >= target {
-			right = mid - 1
-		} else {
-			left = mid + 1
-		}
-	}
-	return right + 1
-}
-
-func getFirst2(nums []int, target int) int {
+// 寻找左边界
+func getLeft(nums []int, target int) int {
 	left, right := 0, len(nums)
 	for left < right {
 		mid := left + (right-left)>>1
@@ -84,10 +30,11 @@ func getFirst2(nums []int, target int) int {
 			left = mid + 1
 		}
 	}
-	return right
+	return left // right+1
 }
 
-func getLast(nums []int, target int) int {
+// 寻找右边界
+func getRight(nums []int, target int) int {
 	left, right := 0, len(nums)-1
 	for left <= right {
 		mid := left + (right-left)>>1
@@ -100,22 +47,27 @@ func getLast(nums []int, target int) int {
 	return right
 }
 
-func getLast2(nums []int, target int) int {
-	left, right := 0, len(nums)
-	for left < right {
-		mid := left + (right-left)>>1
-		if nums[mid] <= target {
-			left = mid + 1
-		} else {
-			right = mid
-		}
+func TestRange(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		target int
+		result []int
+	}{
+		{nums: []int{5, 7, 7, 8, 8, 10}, target: 8, result: []int{3, 4}},
+		{nums: []int{5, 7, 7, 8, 8, 10}, target: 6, result: []int{-1, -1}},
+		{nums: []int{}, target: 8, result: []int{-1, -1}},
 	}
-	return right - 1
+	assert := assert.New(t)
+	for _, test := range tests {
+		actual := searchRange(test.nums, test.target)
+		assert.Equal(test.result, actual)
+	}
 }
 
-func TestGetFirst(t *testing.T) {
-	fmt.Println(getFirst([]int{5, 7, 7, 8, 8, 8, 10}, 8))
-	fmt.Println(getFirst([]int{1}, 1))
-	fmt.Println(getLast([]int{5, 7, 7, 8, 8, 8, 10}, 8))
-	fmt.Println(getLast([]int{1}, 1))
+func TestGet(t *testing.T) {
+	assert.Equal(t, 3, getLeft([]int{5, 7, 7, 8, 8, 8, 10}, 8))
+	assert.Equal(t, 0, getLeft([]int{1}, 1))
+
+	assert.Equal(t, 5, getRight([]int{5, 7, 7, 8, 8, 8, 10}, 8))
+	assert.Equal(t, 0, getRight([]int{1}, 1))
 }

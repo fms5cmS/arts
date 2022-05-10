@@ -25,9 +25,14 @@ func searchInsert(nums []int, target int) int {
 	}
 	// 此时 right < left
 	// 目标值在数组所有元素之前  [0, -1]，left 始终为0，而 right 此时等于 -1
-	// 目标值插入数组中的位置 [left, right]，return  right + 1
 	// 目标值在数组所有元素之后的情况 [left, right]，right 始终为 len(nums)-1
-	return right + 1
+	// 目标值插入数组中的位置，假设 nums = [1, 3, 5, 6], target = 2
+	// 		for 循环走到
+	//			left = 0, right = 1 时，此时 mid = 0, 对应的值为 1 ( < target)，于是 left 更新为 1
+	// 			left = 1, right = 1 时，此时 mid = 1, 对应的值为 3 ( > target)，于是 right 更新为 0
+	//			left = 1, right = 0 时，退出循环
+	//			要插入的位置应为 1
+	return right + 1 // 这里可以直接返回 left
 }
 
 func searchInsert1(nums []int, target int) int {

@@ -2,7 +2,7 @@ package hashRela
 
 func isAnagram(s string, t string) bool {
 	var record [26]int
-	// 记录 s 中每个字符出现的次数
+	// recordMyself s 中每个字符出现的次数
 	for _, ss := range s {
 		record[ss-'a']++
 	}
