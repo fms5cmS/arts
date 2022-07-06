@@ -24,3 +24,4 @@ k8s_yaml(mysql)
 
 k8s_resource('etcd-local', port_forwards=['2379:2379','2380:2380'])
 k8s_resource('mysql-local', port_forwards=['3306:3306'])
+k8s_resource('redis-local-master', port_forwards=['6379:6379'])
