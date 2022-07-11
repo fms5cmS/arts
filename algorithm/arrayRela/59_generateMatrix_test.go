@@ -1,5 +1,10 @@
 package arrayRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 func generateMatrix(n int) [][]int {
 	matrix := make([][]int, n)
 	for i := range matrix {
@@ -40,4 +45,23 @@ func generateMatrix(n int) [][]int {
 		left++ // 更新左列的索引
 	}
 	return matrix
+}
+
+func TestGenerateMatrix(t *testing.T) {
+	tests := []struct {
+		input  int
+		output [][]int
+	}{
+		{
+			input:  3,
+			output: [][]int{{1, 2, 3}, {8, 9, 4}, {7, 6, 5}},
+		},
+		{
+			input:  1,
+			output: [][]int{{1}},
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.output, generateMatrix(test.input))
+	}
 }
