@@ -6,9 +6,55 @@ import (
 )
 
 func searchRange(nums []int, target int) []int {
+	if len(nums) < 1 {
+		return []int{-1, -1}
+	}
+	// case: target 的值在数组两侧
+	if target < nums[0] || target > nums[len(nums)-1] {
+		return []int{-1, -1}
+	}
+	// 两个函数最终返回值可以假设一个数组来思考！！！！
+	first := getFirstPosition(nums, target)
+	last := getLastPosition(nums, target)
+	// case: target 的值在数组最大最小值范围内，但 target 并不在数组中
+	if first > last {
+		return []int{-1, -1}
+	}
+	// case: target 在数组中
+	return []int{first, last}
+}
+
+func getFirstPosition(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		middle := left + (right-left)>>1
+		if nums[middle] >= target {
+			right = middle - 1
+		} else {
+			left = middle + 1
+		}
+	}
+	return left
+}
+
+func getLastPosition(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		middle := left + (right-left)>>1
+		if nums[middle] <= target {
+			left = middle + 1
+		} else {
+			right = middle - 1
+		}
+	}
+	return right
+}
+
+func searchRange2(nums []int, target int) []int {
 	if len(nums) == 0 {
 		return []int{-1, -1}
 	}
+	// case: target 比最小值小，或 target 比最大值大
 	if target < nums[0] || target > nums[len(nums)-1] {
 		return []int{-1, -1}
 	}
@@ -59,15 +105,16 @@ func TestRange(t *testing.T) {
 	}
 	assert := assert.New(t)
 	for _, test := range tests {
-		actual := searchRange(test.nums, test.target)
-		assert.Equal(test.result, actual)
+		assert.Equal(test.result, searchRange(test.nums, test.target), searchRange2(test.nums, test.target))
 	}
 }
 
 func TestGet(t *testing.T) {
-	assert.Equal(t, 3, getLeft([]int{5, 7, 7, 8, 8, 8, 10}, 8))
-	assert.Equal(t, 0, getLeft([]int{1}, 1))
+	nums1, target1 := []int{5, 7, 7, 8, 8, 8, 10}, 8
+	nums2, target2 := []int{1}, 1
+	assert.Equal(t, 3, getLeft(nums1, target1), getFirstPosition(nums1, target1))
+	assert.Equal(t, 0, getLeft(nums2, target2), getFirstPosition(nums2, target2))
 
-	assert.Equal(t, 5, getRight([]int{5, 7, 7, 8, 8, 8, 10}, 8))
-	assert.Equal(t, 0, getRight([]int{1}, 1))
+	assert.Equal(t, 5, getRight(nums1, target1), getLastPosition(nums1, target1))
+	assert.Equal(t, 0, getRight(nums2, target2), getLastPosition(nums2, target2))
 }
