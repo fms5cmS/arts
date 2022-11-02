@@ -1,7 +1,12 @@
 package linkedlistRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 func removeElements(head *ListNode, val int) *ListNode {
-	dummyHead := &ListNode{Val: 0, Next: head}
+	dummyHead := &ListNode{Val: -1, Next: head}
 	cur := dummyHead
 	for cur.Next != nil {
 		if cur.Next.Val == val {
@@ -13,4 +18,33 @@ func removeElements(head *ListNode, val int) *ListNode {
 		}
 	}
 	return dummyHead.Next
+}
+
+func TestRemoveElements(t *testing.T) {
+	tests := []struct {
+		array  []int
+		val    int
+		output []int
+	}{
+		{
+			array:  []int{1, 2, 6, 3, 4, 5, 6},
+			val:    6,
+			output: []int{1, 2, 3, 4, 5},
+		},
+		{
+			array:  []int{},
+			val:    1,
+			output: []int{},
+		},
+		{
+			array:  []int{7, 7, 7, 7},
+			val:    7,
+			output: []int{},
+		},
+	}
+	for _, test := range tests {
+		before := generateListViaArray(test.array)
+		after := removeElements(before, test.val)
+		assert.Equal(t, test.output, generateArrayViaList(after))
+	}
 }
