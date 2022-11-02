@@ -1,6 +1,9 @@
 package linkedlistRela
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 // 迭代解法
 func reverseList(head *ListNode) *ListNode {
@@ -10,8 +13,8 @@ func reverseList(head *ListNode) *ListNode {
 	var pre *ListNode = nil
 	for head != nil {
 		tmp := head.Next
-		head.Next, pre = pre, head
-		head = tmp
+		head.Next = pre // 反转
+		pre, head = head, tmp
 	}
 	return pre
 }
@@ -34,23 +37,30 @@ func reverse(pre, cur *ListNode) *ListNode {
 }
 
 func TestReverse(t *testing.T) {
-	list := new(ListNode)
-	list.Val = 1
-	list.Next = &ListNode{
-		Val: 2,
-		Next: &ListNode{
-			Val: 3,
-			Next: &ListNode{
-				Val: 4,
-				Next: &ListNode{
-					Val:  5,
-					Next: nil,
-				},
-			},
+	tests := []struct {
+		array  []int
+		output []int
+	}{
+		{
+			array:  []int{1, 2, 3, 4, 5},
+			output: []int{5, 4, 3, 2, 1},
+		},
+		{
+			array:  []int{1, 2},
+			output: []int{2, 1},
+		},
+		{
+			array:  []int{1},
+			output: []int{1},
+		},
+		{
+			array:  []int{},
+			output: []int{},
 		},
 	}
-	t.Log(list)
-	// node := reverseListRecursion(list)
-	node := reverseList(list)
-	t.Log(node)
+	for _, test := range tests {
+		before := generateListViaArray(test.array)
+		after := reverseList(before)
+		assert.Equal(t, test.output, generateArrayViaList(after))
+	}
 }
