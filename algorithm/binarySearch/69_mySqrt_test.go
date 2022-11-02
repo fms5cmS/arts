@@ -1,10 +1,15 @@
 package binarySearch
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+// left, right = 1, 8. middle = 4  16 > 8
+// left, right = 1, 3. middle = 2  4 < 8
+// left, right = 2, 3. middle = 2  4 < 8
+// left, right = 3, 3. middle = 3  9 > 8
+// left, right = 3, 2
 func mySqrt(x int) int {
 	left, right := 1, x
 	for left <= right {
@@ -22,5 +27,6 @@ func mySqrt(x int) int {
 }
 
 func TestMySqrt(t *testing.T) {
-	fmt.Println(mySqrt(4))
+	assert.Equal(t, 2, mySqrt(4))
+	assert.Equal(t, 2, mySqrt(8))
 }
