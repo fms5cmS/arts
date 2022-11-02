@@ -4,17 +4,15 @@ package linkedlistRela
 // slow 每次一步，fast 每次两步
 // 如果有环的话，fast 一定先进入环中，如果 fast 和 slow 相遇的话，一定是在环中相遇
 func hasCycle(head *ListNode) bool {
-	if head == nil {
+	if head == nil || head.Next == nil {
 		return false
 	}
-	// 这里注意不能都是 head，否则 for 循环里直接返回 true 了
-	slow, fast := head, head.Next
-	for fast != nil && fast.Next != nil {
+	slow, fast := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow, fast = slow.Next, fast.Next.Next
 		if slow == fast {
 			return true
 		}
-		slow = slow.Next
-		fast = fast.Next.Next
 	}
 	return false
 }

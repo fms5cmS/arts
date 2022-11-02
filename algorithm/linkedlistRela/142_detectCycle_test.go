@@ -10,14 +10,15 @@ func detectCycle(head *ListNode) *ListNode {
 	slow, fast := head, head
 	for fast.Next != nil && fast.Next.Next != nil {
 		slow, fast = slow.Next, fast.Next.Next
-		// 快慢指针相遇
+		// 快慢指针相遇（不一定在环的起点），说明有环
 		if slow == fast {
-			// head 与慢指针同时从各自当前位置开始走，且速度相同
-			for head != slow {
-				head, slow = head.Next, slow.Next
+			// 重置 slow 为 head，然后slow 与 fast 同时从各自当前位置开始走，且速度相同
+			slow = head
+			for slow != fast {
+				slow, fast = slow.Next, fast.Next
 			}
-			// 当 head 与慢指针相遇时，该节点即为入环节点
-			return head
+			// 当 slow 与 fast 相遇时，该节点即为入环节点
+			return slow
 		}
 	}
 	return nil
