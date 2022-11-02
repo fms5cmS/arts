@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// n < len(head)
+// 1 <= n <= len(head)
 // 假设链表长度为 N，倒数第 n 个节点的索引其实为 N-n！N 个节点从 head 到 tail 共需要 N-1 步。
 // 1. 快指针从 head 先出发，每次走一步，先走 n 步；
 //   - PS：此时快指针距离走到尾节点还有 (N-1)-n 步
