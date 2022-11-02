@@ -1,6 +1,7 @@
 package linkedlistRela
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -30,24 +31,30 @@ func swapPairsRecursion(head *ListNode) *ListNode {
 }
 
 func TestSwapPairs(t *testing.T) {
-	list := &ListNode{
-		Val: 1,
-		Next: &ListNode{
-			Val: 2,
-			Next: &ListNode{
-				Val: 3,
-				Next: &ListNode{
-					Val: 4,
-					Next: &ListNode{
-						Val: 5,
-						Next: &ListNode{
-							Val: 6,
-						},
-					},
-				},
-			},
+	tests := []struct {
+		array  []int
+		output []int
+	}{
+		{
+			array:  []int{1, 2, 3, 4},
+			output: []int{2, 1, 4, 3},
+		},
+		{
+			array:  []int{},
+			output: []int{},
+		},
+		{
+			array:  []int{1},
+			output: []int{1},
+		},
+		{
+			array:  []int{1, 2, 3},
+			output: []int{2, 1, 3},
 		},
 	}
-	t.Log(list)
-	t.Log(swapPairs(list))
+	for _, test := range tests {
+		before := generateListViaArray(test.array)
+		after := swapPairs(before)
+		assert.Equal(t, test.output, generateArrayViaList(after), generateArrayViaList(swapPairsRecursion(before)))
+	}
 }
