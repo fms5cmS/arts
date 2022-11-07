@@ -15,7 +15,7 @@ func intersection(nums1 []int, nums2 []int) []int {
 	for _, num := range nums2 {
 		if _, ok := set[num]; ok {
 			result = append(result, num)
-			delete(set, num)
+			delete(set, num) // 这里需要 delete 已记录到结果集的数值
 		}
 	}
 	return result

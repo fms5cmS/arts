@@ -5,8 +5,11 @@ import (
 	"testing"
 )
 
+// 由于返回的是数组的索引，所以不能对数组排序后使用双指针方式
 func twoSum(nums []int, target int) []int {
+	// 存储已经遍历过的数据！
 	recordMap := make(map[int]int)
+	// 注意里面的顺序！！！存储 num 和 i 的逻辑要放在后面，可以参考 [3, 3] target=6 来理解
 	for i, num := range nums {
 		if index, exists := recordMap[target-num]; exists {
 			return []int{index, i}

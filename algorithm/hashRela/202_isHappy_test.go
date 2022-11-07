@@ -1,10 +1,12 @@
 package hashRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+// 1. 如何取数值各个位上的数
+// 2. 出现无限循环就代表一定不是 happy number
 func isHappy(n int) bool {
 	set := make(map[int]bool)
 	// n == 1 代表是快乐数
@@ -24,6 +26,49 @@ func getSum(n int) int {
 	return sum
 }
 
+func TestGetSum(t *testing.T) {
+	tests := []struct {
+		n   int
+		sum int
+	}{
+		{
+			n:   19,
+			sum: 82,
+		},
+		{
+			n:   82,
+			sum: 68,
+		},
+		{
+			n:   68,
+			sum: 100,
+		},
+
+		{
+			n:   100,
+			sum: 1,
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.sum, getSum(test.n))
+	}
+}
+
 func TestIsHappy(t *testing.T) {
-	fmt.Println(isHappy(19))
+	tests := []struct {
+		n     int
+		happy bool
+	}{
+		{
+			n:     19,
+			happy: true,
+		},
+		{
+			n:     2,
+			happy: false,
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.happy, isHappy(test.n))
+	}
 }
