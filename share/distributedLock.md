@@ -1,3 +1,5 @@
+# Questions
+
 Q1: 分布式锁怎么实现？
 
 分布式锁需要满足几个条件：
@@ -9,7 +11,12 @@ Q1: 分布式锁怎么实现？
 为了避免异常情况无法主动释放锁导致的死锁，需要通过 Redis 命令 `EXPIRE` 对锁加上有效期，主动释放锁可以通过 Redis 命令 `DEL` 完成；
 通过设置 value 值，在进行释放锁的操作时通过 Redis 命令 `GET` 获取 value 后来区分锁是否是自己持有。
 
-`SETNX` 和 `EXPIRE` 是两个单独的命令，不具备原子性，如果 `SETNX` 执行完成后服务器宕机导致锁没有设置过期时间，就会发生死锁，可以使用 `SET key value NX PX expireTime`
+`SETNX` 和 `EXPIRE` 是两个单独的命令，不具备原子性，如果 `SETNX` 执行完成后服务器宕机导致锁没有设置过期时间，就会发生死锁，可以使用 `SET key value PX expireTime` 并添加命令选项
+
+> EX seconds: 设置 key 过期时间，单位 s
+> PX milliseconds: 设置 key 过期时间，单位 ms
+> NX: key 不存在时，设置 key 的值
+> XX: key 存在时，才设置 key 的值
 
 释放锁时需要先 `GET` 再 `DEL`，可以通过 lua 脚本来保证两个操作的原子性。如果加锁操作有失败重试机制，那么在 `SET key value PX expireTime` 加锁之前需要先 `GET` 判断之前是否加锁成功，所以也需要使用 lua 脚本来保证多个命令的原子性！
 
@@ -63,3 +70,28 @@ Q7: Redis 集群的分布式锁
 以上都是单点 Redis 下的分布式锁，如果是 Redis 集群，由于 master 节点宕机导致 master 节点变更，而如果变更前，从节点还没有同步原 master 的数据，那么当该从节点提升为 master 后会发现实例的锁没了。
 
 Redlock 思路：部署多个主节点的 Redis 集群（没有从节点），多数节点加锁成功才认为加锁成功。
+
+# go-zero 的 Redis 锁
+
+core/stores/redis/redislock.go
+
+lock:
+
+```lua
+if redis.call("GET", KEYS[1]) == ARGV[1] then
+    redis.call("SET", KEYS[1], ARGV[1], "PX", ARGV[2])
+    return "OK"
+else
+    return redis.call("SET", KEYS[1], ARGV[1], "NX", "PX", ARGV[2])
+end
+```
+
+del:
+
+```lua
+if redis.call("GET", KEYS[1]) == ARGV[1] then
+    return redis.call("DEL", KEYS[1])
+else
+    return 0
+end
+```
