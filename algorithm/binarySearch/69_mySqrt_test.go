@@ -11,7 +11,10 @@ import (
 // left, right = 3, 3. middle = 3  9 > 8
 // left, right = 3, 2
 func mySqrt(x int) int {
-	left, right := 1, x
+	if x <= 1 {
+		return x
+	}
+	left, right := 1, x>>1
 	for left <= right {
 		mid := left + (right-left)>>1
 		get := mid * mid

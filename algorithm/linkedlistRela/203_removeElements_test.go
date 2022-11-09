@@ -14,6 +14,8 @@ func removeElements(head *ListNode, val int) *ListNode {
 			cur.Next = cur.Next.Next
 			tmp.Next = nil
 		} else {
+			// 注意，只有在 else 的时候才移动 cur！否则如果连续多个节点的值均为 val 时，会出现错误
+			// 如 [7, 7, 7, 7] val = 7 时
 			cur = cur.Next
 		}
 	}

@@ -1,7 +1,10 @@
 package binarySearch
 
 func isPerfectSquare(num int) bool {
-	left, right := 1, num
+	if num == 1 {
+		return true
+	}
+	left, right := 1, num>>1
 	for left <= right {
 		mid := left + (right-left)>>1
 		get := mid * mid
