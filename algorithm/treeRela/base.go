@@ -7,7 +7,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// 层序遍历，将其放入而未数组中
+// LevelOrder 层序遍历，将其放入而未数组中
 func LevelOrder(root *TreeNode) [][]int {
 	if root == nil {
 		return nil
@@ -46,32 +46,6 @@ func LevelOrder(root *TreeNode) [][]int {
 	return ret
 }
 
-func ConstructTreeByLevelOrder(levelVals []interface{}) *TreeNode {
-	if len(levelVals) == 0 {
-		return nil
-	}
-	nodes := make([]*TreeNode, len(levelVals))
-	var root *TreeNode
-	// 1. 数值数组转为节点数组（线性存储结构）
-	for i, val := range levelVals {
-		if val != nil {
-			nodes[i] = &TreeNode{Val: val.(int)}
-		} else {
-			nodes[i] = nil
-		}
-	}
-	// 最开始已经对空数组做了处理，所以走到这里的话 nodes 的长度一定是大于 0 的！
-	root = nodes[0]
-	// 2. 拼接树：线性存储结构转链式存储结构，因为最大要用 i*2+2 的索引下标，所以需要以此作为判断条件防止下标越界
-	for i := 0; i*2+2 < len(levelVals); i++ {
-		if nodes[i] != nil {
-			nodes[i].Left = nodes[i*2+1]
-			nodes[i].Right = nodes[i*2+2]
-		}
-	}
-	return root
-}
-
 type ConnectNode struct {
 	Val   int
 	Left  *ConnectNode
@@ -92,4 +66,34 @@ func getIndex(nums []int, target int) int {
 type Node struct {
 	Val      int
 	Children []*Node
+}
+
+func constructTreeByArray(array []interface{}) *TreeNode {
+	if len(array) == 0 {
+		return nil
+	}
+	nodes := make([]*TreeNode, len(array))
+	for i, v := range array {
+		if v != nil {
+			nodes[i] = &TreeNode{Val: v.(int)}
+		} else {
+			nodes[i] = nil
+		}
+	}
+	// 由于 array 并不是按照二叉树顺序存储的结构来放置的，所以不能用顺序存储的方式来生成树结构
+	// 记录子节点移动的位置
+	j := 1
+	for i := 0; i < len(array); i++ {
+		if nodes[i] != nil {
+			if j < len(array) {
+				nodes[i].Left = nodes[j]
+				j++
+			}
+			if j < len(array) {
+				nodes[i].Right = nodes[j]
+				j++
+			}
+		}
+	}
+	return nodes[0]
 }

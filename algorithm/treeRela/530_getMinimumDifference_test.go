@@ -2,7 +2,6 @@ package treeRela
 
 import (
 	"math"
-	"testing"
 )
 
 // 注意题目说的是二叉搜索树，而二叉搜索树是有序的！
@@ -29,9 +28,4 @@ func findMIn(root *TreeNode, res *[]int) {
 	findMIn(root.Left, res)
 	*res = append(*res, root.Val)
 	findMIn(root.Right, res)
-}
-
-func TestGetMinimumDifference(t *testing.T) {
-	root := ConstructTreeByLevelOrder([]interface{}{1, 0, 48, nil, nil, 12, 49})
-	t.Log(getMinimumDifference(root))
 }
