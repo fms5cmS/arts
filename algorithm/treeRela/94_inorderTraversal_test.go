@@ -1,21 +1,78 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 // 中序遍历递归实现
 func inorderTraversal(root *TreeNode) []int {
-	if root == nil {
-		return nil
-	}
 	ret := make([]int, 0)
+	if root == nil {
+		return ret
+	}
 	ret = append(ret, inorderTraversal(root.Left)...)
 	ret = append(ret, root.Val)
 	ret = append(ret, inorderTraversal(root.Right)...)
 	return ret
 }
 
+// 中序遍历非递归实现，相当于自己模拟了一个栈
+func inorderTraversalByStack(root *TreeNode) []int {
+	ret := make([]int, 0)
+	stack := make([]*TreeNode, 0)
+	// 指针的遍历来访问节点，栈用来处理节点上的元素
+	for root != nil || len(stack) > 0 {
+		// 将当前节点最左侧的所有节点入栈，可以结合下面第一个 test case 理解
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		// 将整棵树左侧的节点从最左开始出栈
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		ret = append(ret, root.Val)
+		root = root.Right
+	}
+	return ret
+}
+
+func TestInOrderTraversal(t *testing.T) {
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  []int
+	}{
+		{
+			name:  "first",
+			array: []interface{}{1, nil, 2, 3},
+			want:  []int{1, 3, 2},
+		},
+		{
+			name:  "second",
+			array: []interface{}{},
+			want:  []int{},
+		},
+		{
+			name:  "third",
+			array: []interface{}{1},
+			want:  []int{1},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, inorderTraversal(root))
+			assert.Equal(t, test.want, inorderTraversalByStack(root))
+			assert.Equal(t, test.want, inorderTraversalNotRecursion(root))
+		})
+	}
+}
+
 // 遍历的非递归方法，统一代码
 // 中序遍历的顺序是 左中右
 // 入栈顺序是      右中左
-func InorderTraversal(root *TreeNode) []int {
+func inorderTraversalNotRecursion(root *TreeNode) []int {
 	result := make([]int, 0)
 	stack := make([]*TreeNode, 0)
 	if root != nil {
@@ -45,23 +102,4 @@ func InorderTraversal(root *TreeNode) []int {
 		}
 	}
 	return result
-}
-
-// 中序遍历非递归实现，相当于自己模拟了一个栈
-func inorderTraversalNotRecursion(root *TreeNode) []int {
-	ret := make([]int, 0)
-	stack := make([]*TreeNode, 0)
-	for root != nil || len(stack) > 0 {
-		// 将当前节点最左侧的所有节点入栈
-		for root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		}
-		// 将整棵树左侧的节点从最左开始出栈
-		root = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		ret = append(ret, root.Val)
-		root = root.Right
-	}
-	return ret
 }

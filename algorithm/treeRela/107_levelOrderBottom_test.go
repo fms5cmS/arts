@@ -1,7 +1,7 @@
 package treeRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -29,20 +29,38 @@ func levelOrderBottom(root *TreeNode) [][]int {
 		result = append(result, tmp)
 	}
 	// 反转结果集
-	for i := 0; i < len(result)/2; i++ {
-		result[i], result[len(result)-i-1] = result[len(result)-i-1], result[i]
+	for left, right := 0, len(result)-1; left < right; left, right = left+1, right-1 {
+		result[left], result[right] = result[right], result[left]
 	}
 	return result
 }
 
 func TestLevelOrderBottom(t *testing.T) {
-	a := &TreeNode{
-		Val:   3,
-		Left:  &TreeNode{Val: 9},
-		Right: &TreeNode{Val: 20, Left: &TreeNode{Val: 15}, Right: &TreeNode{Val: 7}},
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  [][]int
+	}{
+		{
+			name:  "first",
+			array: []interface{}{3, 9, 20, nil, nil, 15, 7},
+			want:  [][]int{{15, 7}, {9, 20}, {3}},
+		},
+		{
+			name:  "second",
+			array: []interface{}{1},
+			want:  [][]int{{1}},
+		},
+		{
+			name:  "third",
+			array: []interface{}{},
+			want:  [][]int{},
+		},
 	}
-	ret := levelOrderBottom(a)
-	for _, ints := range ret {
-		fmt.Println(ints)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, levelOrderBottom(root))
+		})
 	}
 }

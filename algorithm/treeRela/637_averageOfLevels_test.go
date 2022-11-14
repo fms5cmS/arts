@@ -1,5 +1,10 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 func averageOfLevels(root *TreeNode) []float64 {
 	result := make([]float64, 0)
 	queue := make([]*TreeNode, 0)
@@ -20,7 +25,33 @@ func averageOfLevels(root *TreeNode) []float64 {
 				queue = append(queue, cur.Right)
 			}
 		}
+		// 注意这里类型强转
 		result = append(result, float64(sum)/float64(size))
 	}
 	return result
+}
+
+func TestAverageOfLevels(t *testing.T) {
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  []float64
+	}{
+		{
+			name:  "first",
+			array: []interface{}{3, 9, 20, nil, nil, 15, 7},
+			want:  []float64{3.00000, 14.50000, 11.00000},
+		},
+		{
+			name:  "second",
+			array: []interface{}{3, 9, 20, 15, 7},
+			want:  []float64{3.00000, 14.50000, 11.00000},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, averageOfLevels(root))
+		})
+	}
 }
