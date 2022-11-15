@@ -1,5 +1,10 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 // 对称二叉树，必须是镜像对称
 func isSymmetric(root *TreeNode) bool {
 	if root == nil {
@@ -20,7 +25,7 @@ func compareIsSymmetric(left, right *TreeNode) bool {
 	} else if left.Val != right.Val {
 		return false
 	}
-	// 走到这里时，left、right 均不为空，切值相等，需要比较子节点，注意下面比较的节点！
+	// 走到这里时，left、right 均不为空，且值相等，需要比较子节点，注意下面比较的节点！
 	outside := compareIsSymmetric(left.Left, right.Right)
 	inside := compareIsSymmetric(left.Right, right.Left)
 	return outside && inside
@@ -33,6 +38,7 @@ func isSymmetricByQueue(root *TreeNode) bool {
 	}
 	queue := make([]*TreeNode, 0)
 	queue = append(queue, []*TreeNode{root.Left, root.Right}...)
+	// 把左右两个紫薯要比较的元素顺序放进容器中，然后成对比较
 	for len(queue) > 0 {
 		leftNode, rightNode := queue[0], queue[1]
 		queue = queue[2:]
@@ -47,4 +53,35 @@ func isSymmetricByQueue(root *TreeNode) bool {
 		queue = append(queue, []*TreeNode{leftNode.Left, rightNode.Right, leftNode.Right, rightNode.Left}...)
 	}
 	return true
+}
+
+func TestIsSymmetric(t *testing.T) {
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  bool
+	}{
+		{
+			name:  "first",
+			array: []interface{}{1, 2, 2, 3, 4, 4, 3},
+			want:  true,
+		},
+		{
+			name:  "second",
+			array: []interface{}{1, 2, 2, nil, 3, nil, 3},
+			want:  false,
+		},
+		{
+			name:  "third",
+			array: []interface{}{1, 2, 3},
+			want:  false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, isSymmetric(root))
+			assert.Equal(t, test.want, isSymmetricByQueue(root))
+		})
+	}
 }

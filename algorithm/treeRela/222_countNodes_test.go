@@ -27,7 +27,7 @@ func countNodes(root *TreeNode) int {
 	// 注意这里要初始化为 0，为了在满二叉树时方便计算
 	leftHeight, rightHeight := 0, 0
 	// 分别计算 root 的左右子树的的高度
-	// 注意：这里只需计算了最左和最右侧的叶子节点高度来判断这棵完全二叉树是否为满二叉树
+	// 注意：这里只需计算了最左和最右侧的叶子节点高度来判断这棵完全二叉树是否为满二叉树！！
 	for left != nil {
 		left = left.Left
 		leftHeight++
