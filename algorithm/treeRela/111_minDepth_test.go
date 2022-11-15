@@ -1,5 +1,10 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 // 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
 func minDepth(root *TreeNode) int {
 	queue := make([]*TreeNode, 0)
@@ -56,4 +61,30 @@ func getDepthForMin(root *TreeNode) int {
 		return x
 	}
 	return 1 + min(leftDepth, rightDepth)
+}
+
+func TestMinDepth(t *testing.T) {
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  int
+	}{
+		{
+			name:  "first",
+			array: []interface{}{3, 9, 20, nil, nil, 15, 7},
+			want:  2,
+		},
+		{
+			name:  "second",
+			array: []interface{}{2, nil, 3, nil, 4, nil, 5, nil, 6},
+			want:  5,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, minDepth(root))
+			assert.Equal(t, test.want, minDepthByRecursion(root))
+		})
+	}
 }

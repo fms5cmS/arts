@@ -1,6 +1,11 @@
 package treeRela
 
-// 使用迭代法的话，使用层序遍历是最为合适的，因为最大的深度就是二叉树的层数，和层序遍历的方式极其吻合。
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+// 迭代法的话，使用层序遍历是最为合适的，因为最大的深度就是二叉树的层数，和层序遍历的方式极其吻合。
 // 在二叉树中，一层一层的来遍历二叉树，记录一下遍历的层数就是二叉树的深度
 func maxDepth(root *TreeNode) int {
 	depth := 0
@@ -67,4 +72,31 @@ func getDepthForMax(root *TreeNode, depth int, result int) int {
 		result = getDepthForMax(root.Right, depth+1, result)
 	}
 	return result
+}
+
+func TestMaxDepth(t *testing.T) {
+	tests := []struct {
+		name  string
+		array []interface{}
+		want  int
+	}{
+		{
+			name:  "first",
+			array: []interface{}{3, 9, 20, nil, nil, 15, 7},
+			want:  3,
+		},
+		{
+			name:  "second",
+			array: []interface{}{1, nil, 2},
+			want:  2,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.array)
+			assert.Equal(t, test.want, maxDepth(root))
+			assert.Equal(t, test.want, maxDepthByRecursion1(root))
+			assert.Equal(t, test.want, maxDepthByRecursion2(root))
+		})
+	}
 }
