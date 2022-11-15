@@ -133,7 +133,7 @@ Go 的第三方库实现：[hystrix-go](https://github.com/afex/hystrix-go)
 
 上面的熔断后会一刀切，客户端所有的流量都会被丢弃！
 
-Google SRE 中的熔断算法核心公式：`max(0, (request - K*accepts)/(requests + 1))`，该公式计算的是请求被丢弃的概率。
+[Google SRE](https://sre.google/sre-book/handling-overload/#eq2101) 中的熔断算法核心公式：`max(0, (request - K*accepts)/(requests + 1))`，该公式**计算的是请求被丢弃的概率**。
 
 > requests，总的请求数
 > acceots，成功的请求数
@@ -143,11 +143,12 @@ Google SRE 中的熔断算法核心公式：`max(0, (request - K*accepts)/(reque
 
 仅考虑是否被丢弃（需要 max 函数的第二个参数值为负数），而不考虑具体丢弃的概率的话：
 如果 K = 1，`request - 1*accepts <= 0` ==> `accepts/requests >= 1`，也就是说请求成功率必须是 100%，才不触发熔断
+如果 K = 1，也就意味着调用方每 10 个请求就会有 1 个请求触发熔断。
 如果 K = 2，`request - 2*accepts <= 0` ==> `accepts/requests >= 1/2`，也就是说只要请求成功率 >= 50%，才不触发熔断
 
 这种熔断方式只有关闭、打开两种状态，而没有半打开状态。
 
-https://github.com/go-kratos/kratos 中有实现。
+https://github.com/go-kratos/kratos、[go-zero](https://www.zhihu.com/column/c_1384568438619271168)中有实现。
 
 # 额外阅读
 
