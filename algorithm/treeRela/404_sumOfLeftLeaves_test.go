@@ -1,19 +1,24 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 // 计算给定二叉树的所有**左叶子**之和。
 // 判断当前节点是不是左叶子是无法判断的，必须要通过节点的父节点来判断其左孩子是不是左叶子!
 // 递归
-// 后序遍历（左右中），是因为要通过递归函数的返回值来累加求取左叶子数值之和。？似乎前中序遍历也可以
 func sumOfLeftLeaves(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	leftValue := sumOfLeftLeaves(root.Left)   // 左子树左叶子之和
-	rightValue := sumOfLeftLeaves(root.Right) // 右子树左叶子之和
 	midValue := 0
-	if root.Left != nil && root.Left.Left == nil && root.Left.Right == nil {
+	// 找到左叶子节点
+	if root.Left != nil && (root.Left.Left == nil && root.Left.Right == nil) {
 		midValue = root.Left.Val
 	}
+	leftValue := sumOfLeftLeaves(root.Left)   // 左子树左叶子之和
+	rightValue := sumOfLeftLeaves(root.Right) // 右子树左叶子之和
 	return leftValue + rightValue + midValue
 }
 
@@ -39,4 +44,32 @@ func sumOfLeftLeaves2(root *TreeNode) int {
 		}
 	}
 	return result
+}
+
+func TestSumOfLeftLeavesr(t *testing.T) {
+	tests := []struct {
+		name      string
+		leveOrder []interface{}
+		want      int
+	}{
+		{
+			name:      "first",
+			leveOrder: []interface{}{3, 9, 20, nil, nil, 15, 7},
+			want:      24,
+		},
+		{
+			name:      "second",
+			leveOrder: []interface{}{1},
+			want:      0,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.leveOrder)
+			assert.Equal(t, test.leveOrder, root.LevelPrint())
+
+			assert.Equal(t, test.want, sumOfLeftLeaves(root))
+			assert.Equal(t, test.want, sumOfLeftLeaves2(root))
+		})
+	}
 }

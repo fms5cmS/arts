@@ -5,6 +5,8 @@
 
 还有固定窗口算法、滑动窗口算法。
 
+[go-zero 的滑动窗口限流](https://go-zero.dev/cn/docs/blog/governance/periodlimit)
+
 ## Leaky bucket
 
 > 漏桶算法(Leaky Bucket) 是网络世界中流量整形（Traffic Shaping）或速率限制（Rate Limiting）时经常使用的一种算法，它的主要目的是控制数据注入到网络的速率，平滑网络上的突发流量。
@@ -30,7 +32,7 @@ Golang 的第三方库实现：[ratelimit](https://github.com/uber-go/ratelimit)
 
 当桶里面有积攒下来的 token 时，可以应对突发流量。
 
-Golang 的实现：[rate](golang.org/x/time/rate)
+Golang 的实现：[rate](golang.org/x/time/rate)、[go-zero 的 tokenlimit](https://go-zero.dev/cn/docs/blog/governance/tokenlimit)
 
 ## 自适应限流
 
@@ -133,7 +135,7 @@ Go 的第三方库实现：[hystrix-go](https://github.com/afex/hystrix-go)
 
 上面的熔断后会一刀切，客户端所有的流量都会被丢弃！
 
-Google SRE 中的熔断算法核心公式：`max(0, (request - K*accepts)/(requests + 1))`，该公式计算的是请求被丢弃的概率。
+[Google SRE](https://sre.google/sre-book/handling-overload/#eq2101) 中的熔断算法核心公式：`max(0, (request - K*accepts)/(requests + 1))`，该公式**计算的是请求被丢弃的概率**。
 
 > requests，总的请求数
 > acceots，成功的请求数
@@ -141,13 +143,17 @@ Google SRE 中的熔断算法核心公式：`max(0, (request - K*accepts)/(reque
 
 当成功的请求数量越少，K越小的时候的值就越大，计算出的概率也就越大，表示这个请求被丢弃的概率越大，极限情况下，accepts 趋于 0，得到的概率就是 1，会丢弃全部请求。
 
-仅考虑是否被丢弃（需要 max 函数的第二个参数值为负数），而不考虑具体丢弃的概率的话：
-如果 K = 1，`request - 1*accepts <= 0` ==> `accepts/requests >= 1`，也就是说请求成功率必须是 100%，才不触发熔断
-如果 K = 2，`request - 2*accepts <= 0` ==> `accepts/requests >= 1/2`，也就是说只要请求成功率 >= 50%，才不触发熔断
+丢弃概率 dropRatio 会在 [0, 1) 之间，然后系统会随机生成一个 [0.0, 1.0) 的数字，和这个 dropRatio 比较，如果比 dropRatio 小，则丢弃请求，否则放行请求。
 
-这种熔断方式只有关闭、打开两种状态，而没有半打开状态。
+如果 dropRatio == 0，所有请求都会放行，如果 dropRatio > 0，那么就会存在一些请求被丢弃。
 
-https://github.com/go-kratos/kratos 中有实现。
+这种熔断方式没有开、关的状态！
+
+[https://github.com/go-kratos/kratos](kratos)、[go-zero](https://go-zero.dev/cn/docs/blog/governance/breaker-algorithms)中有实现。
+
+go-zero 中设置的 K = 1.5，`request - 1.5*accepts > 0` -> `accepts/request < 2/3`，也就是说，即使有 1/3 的失败请求，也不会丢弃任何请求。
+
+假设 K = 1，`accepts/request < 1`，只要成功率不是 100%，就会丢弃部分请求。
 
 # 额外阅读
 

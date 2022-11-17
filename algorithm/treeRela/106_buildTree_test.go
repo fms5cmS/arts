@@ -1,7 +1,7 @@
 package treeRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -12,17 +12,23 @@ import (
 //     中序数组的大小一定要和后序数组的大小相同！！！
 //   所以，后序数组可以按照中序数组的大小分割
 func buildTreeByInAndPostOrder(inorder []int, postorder []int) *TreeNode {
-	if len(postorder) == 0 {
+	if len(inorder) == 0 {
 		return nil
 	}
+	// 后序数组最右侧元素为根节点的值
 	length := len(postorder)
-	root := new(TreeNode)
-	// 对根节点赋值
-	root.Val = postorder[length-1]
-	// 找到根节点的值在 inorder 中的索引，从而确定 inorder 中左右子树各自的元素
-	index := getIndex(inorder, postorder[length-1])
+	root := &TreeNode{Val: postorder[length-1]}
+	// 找到根节点值在中序数组中的位置
+	index := -1
+	for i, v := range inorder {
+		if v == root.Val {
+			index = i
+		}
+	}
 	if index >= 0 {
-		root.Left = buildTreeByInAndPostOrder(inorder[0:index], postorder[0:index])
+		// 中序数组有明确的分割点：根节点将中序数组分割为左右子树
+		// 注：后序数组没有明确的分割点，但左右子树在后续数组的长度一定与在中序数组中的长度相等
+		root.Left = buildTreeByInAndPostOrder(inorder[:index], postorder[:index])
 		root.Right = buildTreeByInAndPostOrder(inorder[index+1:], postorder[index:length-1])
 		// 与 105 不同，这里要用右子树的长度来划分
 		// rightLength := len(inorder[index+1:])
@@ -33,13 +39,29 @@ func buildTreeByInAndPostOrder(inorder []int, postorder []int) *TreeNode {
 }
 
 func TestBuildTreeByInAndPostOrder(t *testing.T) {
-	postorder := []int{9, 15, 7, 20, 3}
-	inorder := []int{9, 3, 15, 20, 7}
-	// postorder := []int{2, 1}
-	// inorder := []int{1, 2}
-	tree := buildTreeByInAndPostOrder(inorder, postorder)
-	treeArr := LevelOrder(tree)
-	for _, level := range treeArr {
-		fmt.Println(level)
+	tests := []struct {
+		name      string
+		inorder   []int
+		postorder []int
+		wantLevel []interface{}
+	}{
+		{
+			name:      "first",
+			inorder:   []int{9, 3, 15, 20, 7},
+			postorder: []int{9, 15, 7, 20, 3},
+			wantLevel: []interface{}{3, 9, 20, nil, nil, 15, 7},
+		},
+		{
+			name:      "second",
+			inorder:   []int{-1},
+			postorder: []int{-1},
+			wantLevel: []interface{}{-1},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := buildTreeByInAndPostOrder(test.inorder, test.postorder)
+			assert.Equal(t, root.LevelPrint(), test.wantLevel)
+		})
 	}
 }

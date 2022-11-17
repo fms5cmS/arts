@@ -68,6 +68,7 @@ type Node struct {
 	Children []*Node
 }
 
+// 根据 Leetcode 上常见的传参构建树
 func constructTreeByArray(array []interface{}) *TreeNode {
 	if len(array) == 0 {
 		return nil
@@ -96,4 +97,38 @@ func constructTreeByArray(array []interface{}) *TreeNode {
 		}
 	}
 	return nodes[0]
+}
+
+// LevelPrint 和上面的 constructTreeByArray 互为相反的操作
+func (t *TreeNode) LevelPrint() []interface{} {
+	result := make([]interface{}, 0)
+	queue := []*TreeNode{t}
+	for len(queue) > 0 {
+		size := len(queue)
+		finalLeve := true
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			if cur == nil {
+				result = append(result, nil)
+			} else {
+				finalLeve = false
+				result = append(result, cur.Val)
+				queue = append(queue, cur.Left, cur.Right)
+			}
+		}
+		if finalLeve {
+			// 移除最后一层的 nil
+			// result = result[:len(result)-size]
+			break
+		}
+	}
+	j := len(result) - 1
+	// 从后往前找到第一个不为 nil 的元素索引
+	for ; j > 0; j-- {
+		if result[j] != nil {
+			break
+		}
+	}
+	return result[:j+1]
 }
