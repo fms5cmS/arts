@@ -1,5 +1,29 @@
 package treeRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+func hasPathSum3(root *TreeNode, targetSum int) bool {
+	if root == nil {
+		return false
+	}
+	// 递归终止条件，当前节点为叶子节点，判断当前节点值与 targetSum 相同
+	if root.Left == nil && root.Right == nil {
+		return root.Val == targetSum
+	}
+	// 下面可以简写为：
+	// return hasPathSum(root.Left, targetSum-root.Val) || hasPathSum(root.Right, targetSum-root.Val)
+	if hasPathSum(root.Left, targetSum-root.Val) {
+		return true
+	}
+	if hasPathSum(root.Right, targetSum-root.Val) {
+		return true
+	}
+	return false
+}
+
 func hasPathSum(root *TreeNode, targetSum int) bool {
 	if root == nil {
 		return false
@@ -60,4 +84,48 @@ func hasPathSumNoRecursion(root *TreeNode, targetSum int) bool {
 		}
 	}
 	return false
+}
+
+func TestHasPathSum(t *testing.T) {
+	tests := []struct {
+		name      string
+		leveOrder []interface{}
+		targetSum int
+		want      bool
+	}{
+		{
+			name:      "first",
+			leveOrder: []interface{}{5, 4, 8, 11, nil, 13, 4, 7, 2, nil, nil, nil, 1},
+			targetSum: 22,
+			want:      true,
+		},
+		{
+			name:      "second",
+			leveOrder: []interface{}{1, 2, 3},
+			targetSum: 5,
+			want:      false,
+		},
+		{
+			name:      "third",
+			leveOrder: []interface{}{},
+			targetSum: 0,
+			want:      false,
+		},
+		{
+			name:      "fourth",
+			leveOrder: []interface{}{1, 2},
+			targetSum: 1,
+			want:      false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := constructTreeByArray(test.leveOrder)
+			assert.Equal(t, test.leveOrder, root.LevelPrint())
+
+			assert.Equal(t, test.want, hasPathSum3(root, test.targetSum))
+			assert.Equal(t, test.want, hasPathSum(root, test.targetSum))
+			assert.Equal(t, test.want, hasPathSumNoRecursion(root, test.targetSum))
+		})
+	}
 }
