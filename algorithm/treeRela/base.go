@@ -130,5 +130,9 @@ func (t *TreeNode) LevelPrint() []interface{} {
 			break
 		}
 	}
-	return result[:j+1]
+	result = result[:j+1]
+	if len(result) == 1 && result[0] == nil {
+		return []interface{}{}
+	}
+	return result
 }

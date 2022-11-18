@@ -18,12 +18,27 @@ func inorderTraversal(root *TreeNode) []int {
 }
 
 // 中序遍历非递归实现，相当于自己模拟了一个栈
+//
+//		   4
+//		3    2
+//	 1
+//
+// 最里层 for 循环先将最左侧节点入栈 stack = [4, 3, 1]
+// 1 出栈，root = 1，并将值放入数组，array = 【1]，root=root.Right 为 nil
+// root == nil，stack 不为空
+// 3 出栈，root = 3，array = [1, 3]，root=root.Right 为 nil
+// root == nil，stack 不为空
+// 4 出栈，root = 4，array = [1, 3, 4]，root=root.Right 不为 nil
+// root != nil，stack 为空
+// 最里层 for 循环将 2 子树最左侧节点入栈，此时 root == nil
+// 2 出栈，root = 2，array = [1, 3, 4, 2]，root=root.Right 为 nil
+// root == nil，stack 为空，退出
 func inorderTraversalByStack(root *TreeNode) []int {
 	ret := make([]int, 0)
 	stack := make([]*TreeNode, 0)
 	// 指针的遍历来访问节点，栈用来处理节点上的元素
 	for root != nil || len(stack) > 0 {
-		// 将当前节点最左侧的所有节点入栈，可以结合下面第一个 test case 理解
+		// 将当前节点最左侧的所有节点入栈
 		for root != nil {
 			stack = append(stack, root)
 			root = root.Left
