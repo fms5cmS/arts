@@ -1,9 +1,14 @@
 package treeRela
 
-//                    3
-//        0                         4
-//                2
-//            1
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+//	            3
+//	0                         4
+//	        2
+//	    1
 //
 // low = 1, high = 3
 func trimBST(root *TreeNode, low int, high int) *TreeNode {
@@ -31,7 +36,7 @@ func trimBSTNotRecursion(root *TreeNode, low int, high int) *TreeNode {
 	if root == nil {
 		return nil
 	}
-	// 当前节点不在区间内
+	// 找到节点在范围的子树，由于范围外的节点要被 trim，所以直接用 root 来遍历
 	for root != nil && (root.Val < low || root.Val > high) {
 		if root.Val < low { // 当前节点的左子树不符合
 			root = root.Right
@@ -57,4 +62,39 @@ func trimBSTNotRecursion(root *TreeNode, low int, high int) *TreeNode {
 		cur = cur.Right
 	}
 	return root
+}
+
+func TestTrimBST(t *testing.T) {
+	tests := []struct {
+		name        string
+		levelOrders []interface{}
+		low         int
+		high        int
+		want        []interface{}
+	}{
+		{
+			name:        "first",
+			levelOrders: []interface{}{1, 0, 2},
+			low:         1,
+			high:        2,
+			want:        []interface{}{1, nil, 2},
+		},
+		{
+			name:        "second",
+			levelOrders: []interface{}{3, 0, 4, nil, 2, nil, nil, 1},
+			low:         1,
+			high:        3,
+			want:        []interface{}{3, 2, nil, 1},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root1 := constructTreeByArray(test.levelOrders)
+			assert.Equal(t, test.levelOrders, root1.LevelPrint())
+			assert.Equal(t, test.want, trimBST(root1, test.low, test.high).LevelPrint())
+
+			root2 := constructTreeByArray(test.levelOrders)
+			assert.Equal(t, test.want, trimBSTNotRecursion(root2, test.low, test.high).LevelPrint())
+		})
+	}
 }
