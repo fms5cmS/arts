@@ -2,6 +2,7 @@ package backtrackingRela
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -22,8 +23,10 @@ func combine(n int, k int) [][]int {
 			return
 		}
 		// for 循环来选择当前处理的值
+		// for i := startValue; i <= n-(k-len(path))+1; i++ { // 剪枝操作，n=4，k=4 时打印 path 理解
 		for i := startValue; i <= n; i++ {
 			path = append(path, i)
+			fmt.Println(path)
 			// 递归函数用来从未被使用过的值（就需要用到 startValue 了）中找下一个值
 			backtracking(i + 1)
 			path = path[:len(path)-1] // 回溯，撤回上一步处理的值
@@ -34,8 +37,34 @@ func combine(n int, k int) [][]int {
 }
 
 func TestCombine77(t *testing.T) {
-	result := combine(4, 2)
-	for _, values := range result {
-		fmt.Println(values)
+	tests := []struct {
+		name string
+		n    int
+		k    int
+		want [][]int
+	}{
+		{
+			name: "1",
+			n:    4,
+			k:    2,
+			want: [][]int{{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}},
+		},
+		{
+			name: "2",
+			n:    1,
+			k:    1,
+			want: [][]int{{1}},
+		},
+		{
+			name: "3",
+			n:    4,
+			k:    4,
+			want: [][]int{{1, 2, 3, 4}},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, combine(test.n, test.k))
+		})
 	}
 }
