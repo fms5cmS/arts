@@ -1,7 +1,7 @@
 package backtrackingRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -43,7 +43,25 @@ func partition(s string) [][]string {
 }
 
 func TestPartition(t *testing.T) {
-	src := "aab"
-	result := partition(src)
-	fmt.Println(result)
+	tests := []struct {
+		name string
+		s    string
+		want [][]string
+	}{
+		{
+			name: "1",
+			s:    "aab",
+			want: [][]string{{"a", "a", "b"}, {"aa", "b"}},
+		},
+		{
+			name: "2",
+			s:    "a",
+			want: [][]string{{"a"}},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, partition(test.s))
+		})
+	}
 }

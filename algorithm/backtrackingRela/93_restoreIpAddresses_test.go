@@ -8,6 +8,43 @@ import (
 )
 
 func restoreIpAddresses(s string) []string {
+	if len(s) < 4 {
+		return nil
+	}
+	result := make([]string, 0)
+	path := make([]string, 0)
+	var backtracking func(start int)
+	backtracking = func(start int) {
+		if len(path) == 4 && start == len(s) {
+			str := strings.Join(path, ".")
+			result = append(result, str)
+		}
+		for i := start; i < len(s); i++ {
+			if isValidIPSegment(s[start : i+1]) {
+				path = append(path, s[start:i+1])
+			} else {
+				continue
+			}
+			backtracking(i + 1)
+			path = path[:len(path)-1]
+		}
+	}
+	backtracking(0)
+	return result
+}
+
+func isValidIPSegment(s string) bool {
+	if len(s) > 1 && s[0] == '0' {
+		return false
+	}
+	i, _ := strconv.Atoi(s)
+	if i < 0 || i > 255 {
+		return false
+	}
+	return true
+}
+
+func restoreIpAddresses2(s string) []string {
 	result := make([]string, 0)
 	// 判断字符串 str 在 [start, end] 区间组成的数字是否合法
 	isValid := func(str string) bool {
@@ -53,17 +90,20 @@ func restoreIpAddresses(s string) []string {
 
 func TestRestoreIpAddress(t *testing.T) {
 	tests := []struct {
+		name   string
 		input  string
 		output []string
 	}{
-		{input: "25525511135", output: []string{"255.255.11.135", "255.255.111.35"}},
-		{input: "0000", output: []string{"0.0.0.0"}},
-		{input: "1111", output: []string{"1.1.1.1"}},
-		{input: "010010", output: []string{"0.10.0.10", "0.100.1.0"}},
-		{input: "101023", output: []string{"1.0.10.23", "1.0.102.3", "10.1.0.23", "10.10.2.3", "101.0.2.3"}},
+		{name: "1", input: "25525511135", output: []string{"255.255.11.135", "255.255.111.35"}},
+		{name: "2", input: "0000", output: []string{"0.0.0.0"}},
+		{name: "3", input: "1111", output: []string{"1.1.1.1"}},
+		{name: "4", input: "010010", output: []string{"0.10.0.10", "0.100.1.0"}},
+		{name: "5", input: "101023", output: []string{"1.0.10.23", "1.0.102.3", "10.1.0.23", "10.10.2.3", "101.0.2.3"}},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		assert.Equal(test.output, restoreIpAddresses(test.input))
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.output, restoreIpAddresses(test.input))
+			assert.Equal(t, test.output, restoreIpAddresses2(test.input))
+		})
 	}
 }
