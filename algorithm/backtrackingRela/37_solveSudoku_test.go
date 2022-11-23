@@ -12,23 +12,22 @@ import (
 func solveSudoku(board [][]byte) {
 	var backtracking func() bool
 	backtracking = func() bool {
-		for i := 0; i < len(board); i++ { // 遍历行
-			for j := 0; j < len(board[i]); j++ { // 遍历列
-				// 仅对空位操作
-				if board[i][j] != '.' {
+		for row := 0; row < len(board); row++ {
+			for col := 0; col < len(board); col++ {
+				if board[row][col] != '.' {
 					continue
 				}
-				// 试着在 i,j 坐标放入值 k
-				for k := '1'; k <= '9'; k++ {
-					if isValidFor37(i, j, byte(k), board) {
-						board[i][j] = byte(k) // 放置
-						if backtracking() {   // 找到合适的就返回
+				for val := '1'; val <= '9'; val++ {
+					// 这里先判断 val 能否放到 board[row][col] 的位置上，可以的话再实际放上去！
+					if isValidFor37(board, row, col, byte(val)) {
+						board[row][col] = byte(val)
+						if backtracking() {
 							return true
 						}
-						board[i][j] = '.' // 回溯
+						board[row][col] = '.'
 					}
 				}
-				return false // 9 个数字都不符合要求
+				return false
 			}
 		}
 		return true
@@ -36,21 +35,21 @@ func solveSudoku(board [][]byte) {
 	backtracking()
 }
 
-func isValidFor37(row, col int, val byte, board [][]byte) bool {
-	// 检查同行是否有重复元素
-	for i := 0; i < 9; i++ {
-		if board[row][i] == val {
+func isValidFor37(board [][]byte, row, col int, val byte) bool {
+	// 检查同行
+	for j := 0; j < len(board); j++ {
+		if board[row][j] == val {
 			return false
 		}
 	}
-	// 检查同列是否有重复元素
-	for i := 0; i < 9; i++ {
+	// 检查同列
+	for i := 0; i < len(board); i++ {
 		if board[i][col] == val {
 			return false
 		}
 	}
-	// 判断该位置所在的九宫格中是否已有重复元素
-	startRow, startCol := (row/3)*3, (col/3)*3
+	// 检查 3x3
+	startRow, startCol := (row/3)*3, (col/3)*3 // 注意这里起始位置的计算！
 	for i := startRow; i < startRow+3; i++ {
 		for j := startCol; j < startCol+3; j++ {
 			if board[i][j] == val {
@@ -63,10 +62,12 @@ func isValidFor37(row, col int, val byte, board [][]byte) bool {
 
 func TestSolveSudoku(t *testing.T) {
 	tests := []struct {
+		name   string
 		input  [][]byte
 		output [][]byte
 	}{
 		{
+			name: "1",
 			input: [][]byte{
 				{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
 				{'6', '.', '.', '1', '9', '5', '.', '.', '.'},
@@ -91,9 +92,10 @@ func TestSolveSudoku(t *testing.T) {
 			},
 		},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		solveSudoku(test.input)
-		assert.Equal(test.output, test.input)
+		t.Run(test.name, func(t *testing.T) {
+			solveSudoku(test.input)
+			assert.Equal(t, test.output, test.input)
+		})
 	}
 }

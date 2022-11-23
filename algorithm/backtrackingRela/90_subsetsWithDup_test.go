@@ -10,7 +10,7 @@ import (
 func subsetsWithDup(nums []int) [][]int {
 	result := make([][]int, 0)
 	path := make([]int, 0)
-	// 排序
+	// 排序，方便做去重
 	sort.Ints(nums)
 	var backtracking func(startIndex int)
 	backtracking = func(startIndex int) {
@@ -36,14 +36,16 @@ func subsetsWithDup(nums []int) [][]int {
 
 func TestSubsetsWithDup(t *testing.T) {
 	tests := []struct {
+		name   string
 		input  []int
 		output [][]int
 	}{
-		{input: []int{1, 2, 2}, output: [][]int{{}, {1}, {1, 2}, {1, 2, 2}, {2}, {2, 2}}},
-		{input: []int{0}, output: [][]int{{}, {0}}},
+		{name: "1", input: []int{1, 2, 2}, output: [][]int{{}, {1}, {1, 2}, {1, 2, 2}, {2}, {2, 2}}},
+		{name: "2", input: []int{0}, output: [][]int{{}, {0}}},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		assert.Equal(test.output, subsetsWithDup(test.input))
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.output, subsetsWithDup(test.input))
+		})
 	}
 }

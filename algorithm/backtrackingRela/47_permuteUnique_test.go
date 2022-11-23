@@ -49,14 +49,16 @@ func permuteUnique(nums []int) [][]int {
 
 func TestPermuteUnique(t *testing.T) {
 	tests := []struct {
+		name   string
 		input  []int
 		output [][]int
 	}{
-		{input: []int{1, 1, 2}, output: [][]int{{1, 1, 2}, {1, 2, 1}, {2, 1, 1}}},
-		{input: []int{1, 2, 3}, output: [][]int{{1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2}, {3, 2, 1}}},
+		{name: "1", input: []int{1, 1, 2}, output: [][]int{{1, 1, 2}, {1, 2, 1}, {2, 1, 1}}},
+		{name: "2", input: []int{1, 2, 3}, output: [][]int{{1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2}, {3, 2, 1}}},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		assert.Equal(test.output, permuteUnique(test.input))
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.output, permuteUnique(test.input))
+		})
 	}
 }

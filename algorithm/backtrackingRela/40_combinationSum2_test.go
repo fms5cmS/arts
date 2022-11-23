@@ -11,7 +11,7 @@ import (
 func combinationSum2(candidates []int, target int) [][]int {
 	result := make([][]int, 0)
 	path := make([]int, 0)
-	// 记录每个元素是否使用过
+	// 记录每个元素是否使用过，由于输入元素有限，所以可以用 array 来做去重
 	used := make([]bool, len(candidates))
 	// 排序，保证重复元素在一起
 	sort.Ints(candidates)
