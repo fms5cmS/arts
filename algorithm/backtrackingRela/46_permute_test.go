@@ -39,15 +39,17 @@ func permute(nums []int) [][]int {
 
 func TestPermute(t *testing.T) {
 	tests := []struct {
+		name   string
 		input  []int
 		output [][]int
 	}{
-		{input: []int{1}, output: [][]int{{1}}},
-		{input: []int{0, 1}, output: [][]int{{0, 1}, {1, 0}}},
-		{input: []int{1, 2, 3}, output: [][]int{{1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2}, {3, 2, 1}}},
+		{name: "1", input: []int{1}, output: [][]int{{1}}},
+		{name: "2", input: []int{0, 1}, output: [][]int{{0, 1}, {1, 0}}},
+		{name: "3", input: []int{1, 2, 3}, output: [][]int{{1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2}, {3, 2, 1}}},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		assert.Equal(test.output, permute(test.input))
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.output, permute(test.input))
+		})
 	}
 }

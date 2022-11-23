@@ -1,16 +1,17 @@
 package backtrackingRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"sort"
 	"testing"
 )
 
-// 不同于 39，本题中 candidates 有重复的数字，每个元素只能使用一次
+// 不同于 39，本题中 candidates 有重复的数字，但每个元素只能使用一次
 // 同样要去重
 func combinationSum2(candidates []int, target int) [][]int {
 	result := make([][]int, 0)
 	path := make([]int, 0)
+	// 记录每个元素是否使用过，由于输入元素有限，所以可以用 array 来做去重
 	used := make([]bool, len(candidates))
 	// 排序，保证重复元素在一起
 	sort.Ints(candidates)
@@ -46,7 +47,31 @@ func combinationSum2(candidates []int, target int) [][]int {
 }
 
 func TestCombinationSum2(t *testing.T) {
-	candidates := []int{10, 1, 2, 7, 6, 1, 5}
-	result := combinationSum2(candidates, 8)
-	fmt.Println(result)
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+		want       [][]int
+	}{
+		{
+			name:       "1",
+			candidates: []int{10, 1, 2, 7, 6, 1, 5},
+			target:     8,
+			want: [][]int{{1, 1, 6},
+				{1, 2, 5},
+				{1, 7},
+				{2, 6}},
+		},
+		{
+			name:       "2",
+			candidates: []int{2, 5, 2, 1, 2},
+			target:     5,
+			want:       [][]int{{1, 2, 2}, {5}},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, combinationSum2(test.candidates, test.target))
+		})
+	}
 }

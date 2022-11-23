@@ -2,6 +2,7 @@ package backtrackingRela
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"sort"
 	"testing"
 )
@@ -16,11 +17,14 @@ func combinationSum(candidates []int, target int) [][]int {
 			return
 		}
 		if sum == target {
+			fmt.Println(path)
 			temp := make([]int, len(path))
 			copy(temp, path)
 			result = append(result, temp)
 			return
 		}
+		// 这里还是需要 startIndex 的，如果没有入参 startIndex，每次从 0 开始，那么返回结果会包含重复的组合
+		// [2, 2, 3] 和 [3, 2, 2] 是重复的！
 		for i := startIndex; i < len(candidates); i++ {
 			sum += candidates[i]
 			path = append(path, candidates[i])
@@ -31,13 +35,6 @@ func combinationSum(candidates []int, target int) [][]int {
 	}
 	backtracking(0, 0)
 	return result
-}
-
-// 注意，这个示例的返回为 [2,2,3],[7]，而 [2,3,2] 是重复的
-func TestCombinationSum(t *testing.T) {
-	candidates := []int{2, 3, 6, 7}
-	result := combinationSum(candidates, 7)
-	fmt.Println(result)
 }
 
 // 包含剪枝
@@ -65,4 +62,38 @@ func combinationSumContainsPruning(candidates []int, target int) [][]int {
 	}
 	backtracking(0, 0)
 	return result
+}
+
+func TestCombinationSum(t *testing.T) {
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+		want       [][]int
+	}{
+		{
+			name:       "1",
+			candidates: []int{2, 3, 6, 7},
+			target:     7,
+			want:       [][]int{{2, 2, 3}, {7}},
+		},
+		{
+			name:       "2",
+			candidates: []int{2, 3, 5},
+			target:     8,
+			want:       [][]int{{2, 2, 2, 2}, {2, 3, 3}, {3, 5}},
+		},
+		{
+			name:       "3",
+			candidates: []int{2},
+			target:     1,
+			want:       [][]int{},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, combinationSum(test.candidates, test.target))
+			assert.Equal(t, test.want, combinationSumContainsPruning(test.candidates, test.target))
+		})
+	}
 }
