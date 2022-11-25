@@ -1,7 +1,7 @@
 package dpRela
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -14,18 +14,13 @@ func integerBreak(n int) int {
 	// 4. 从小到大 遍历 n
 	for i := 3; i <= n; i++ {
 		// j < i-1 保证了拆分开的数字都是正整数，而不会有 0
+		// 这里由于会多次设置 dp[i]，所以下面还需要和上一次设置的 dp[i] 判断
 		for j := 1; j < i-1; j++ {
 			// 2. 递推公式
 			// i 拆分为 i-j、j，其乘积为 (i-j)*j    这是拆分为两个正整数相乘
 			// i 拆分为 j、(i-j) 拆分的结果，其乘积为 dp[i-j]*j    这是拆分为两个及两个以上的正整数相乘
 			dp[i] = maxOf2Ints(dp[i], maxOf2Ints((i-j)*j, dp[i-j]*j))
 		}
-	}
-	for i, v := range dp {
-		if i <= 1 {
-			continue
-		}
-		fmt.Println(i, " 拆分后最大乘积为 ", v)
 	}
 	return dp[n]
 }
@@ -38,5 +33,25 @@ func maxOf2Ints(x, y int) int {
 }
 
 func TestIntegerBreak(t *testing.T) {
-	integerBreak(10)
+	tests := []struct {
+		name string
+		n    int
+		want int
+	}{
+		{
+			name: "1",
+			n:    2,
+			want: 1,
+		},
+		{
+			name: "2",
+			n:    10,
+			want: 36,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, integerBreak(test.n))
+		})
+	}
 }
