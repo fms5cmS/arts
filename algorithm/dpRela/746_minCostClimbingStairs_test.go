@@ -1,19 +1,9 @@
 package dpRela
 
-func minCostClimbingStairs(cost []int) int {
-	// 1. dp 数组，dp[i] 代表到达第 i 个台阶所花费的最小体力为 dp[i]
-	dp := make([]int, len(cost))
-	// 3. dp 数组初始化，从递推公式可以看出，dp[i] 是由 dp[i-1]、dp[i-2] 推导得出，所以只初始化 dp[0]、dp[1] 即可
-	for i := 0; i < len(cost) && i < 2; i++ {
-		dp[i] = cost[i]
-	}
-	// 4. 遍历，台阶从前往后遍历
-	for i := 2; i < len(cost); i++ {
-		// 2. 递推公式，注意这里需要加爬上 i 台阶时花费的体力值 cost[i]
-		dp[i] = minOf2Int(dp[i-1], dp[i-2]) + cost[i]
-	}
-	return minOf2Int(dp[len(cost)-1], dp[len(cost)-2])
-}
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 // 题目：
 // 注意：最后一个台阶并不是楼顶！初始阶梯可以从 0 或 1 开始
@@ -28,3 +18,46 @@ func minCostClimbingStairs(cost []int) int {
 //       5. 支付离开 7 阶的体力 1，跨两步到达 9 阶
 //       6. 支付离开 9 阶的体力 1，跨一步到达楼顶
 //                   总体力为 6
+
+func minCostClimbingStairs(cost []int) int {
+	// dp 数组，dp[i] 代表到达第 i 个台阶所花费的最小体力为 dp[i]
+	dp := make([]int, len(cost))
+	// 初始化 dp 数组
+	dp[0], dp[1] = cost[0], cost[1]
+	min := func(x, y int) int {
+		if x < y {
+			return x
+		}
+		return y
+	}
+	for i := 2; i < len(dp); i++ {
+		// 递推公式，这里还需要加上 cost[i]，代表从 i 阶离开消耗的体力值
+		dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+	}
+	// fmt.Println(dp)
+	return min(dp[len(dp)-1], dp[len(dp)-2])
+}
+
+func TestMinCostClimbingStairs(t *testing.T) {
+	tests := []struct {
+		name string
+		cost []int
+		want int
+	}{
+		{
+			name: "1",
+			cost: []int{10, 15, 20},
+			want: 15,
+		},
+		{
+			name: "2",
+			cost: []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1},
+			want: 6,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, minCostClimbingStairs(test.cost))
+		})
+	}
+}

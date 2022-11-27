@@ -1,10 +1,37 @@
 package dpRela
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 // https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0062.%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84.md
+
+func uniquePaths(m int, n int) int {
+	// dp 数组，dp[i][j] 代表从起点 (0, 0) 出发到达 (i, j) 一共有 dp[i][j] 条不同的路径
+	dp := make([][]int, m)
+	for row := 0; row < m; row++ {
+		dp[row] = make([]int, n)
+	}
+	// 初始化 dp 数组，robot 只能向右、向下移动
+	// 第一列 robot 到达的方式只能是向下移动，所以都是 1
+	for row := 0; row < m; row++ {
+		dp[row][0] = 1
+	}
+	// 第一行 robot 到达的方式只能是向右移动，所以都是 1
+	for col := 0; col < n; col++ {
+		dp[0][col] = 1
+	}
+	// 递推公式
+	for row := 1; row < m; row++ {
+		for col := 1; col < n; col++ {
+			// robot 到达非第一列且非第一行位置的方式只能是从该位置上方、该位置左侧到达
+			dp[row][col] = dp[row-1][col] + dp[row][col-1]
+		}
+	}
+	return dp[m-1][n-1]
+}
+
 // 深度优先遍历
 func uniquePathsByDFS(m int, n int) int {
 	var dfs func(i, j, m, n int) int
@@ -25,30 +52,35 @@ func uniquePathsByDFS(m int, n int) int {
 }
 
 func TestUniquePath(t *testing.T) {
-	t.Log(uniquePathsByDFS(3, 3))
-	t.Log(uniquePaths(3, 3))
-}
-
-func uniquePaths(m int, n int) int {
-	// 1. dp 数组，dp[i][j] 代表从起点 (0, 0) 出发到达 (i, j) 一共有 dp[i][j] 条不同的路径
-	dp := make([][]int, m)
-	// 3. dp 数组初始化
-	for i := range dp {
-		dp[i] = make([]int, n)
-		// 从 (0, 0) 到 (i, 0) 的路径只有一条，机器人之恶能一直向下走（机器人只能向下或向右两个方向移动）
-		dp[i][0] = 1
-		for j := range dp[i] {
-			// 同 dp[i][0] 类似
-			dp[0][j] = 1
-		}
+	tests := []struct {
+		name string
+		m    int
+		n    int
+		want int
+	}{
+		{
+			name: "1",
+			m:    3,
+			n:    7,
+			want: 28,
+		},
+		{
+			name: "2",
+			m:    3,
+			n:    2,
+			want: 3,
+		},
+		{
+			name: "3",
+			m:    23,
+			n:    12,
+			want: 193536720,
+		},
 	}
-	// 4. 遍历顺序从递推公式来看，dp[i][j] 都是从其上方和左方推导而来，那么从左到右一层一层遍历就可以了。
-	// 注意：这里都是从 1 开始的
-	for i := 1; i < m; i++ {
-		for j := 1; j < n; j++ {
-			// 2. 递推公式，机器人只能向下或向右两个方向！所以 dp[i][j] 可以由两个方向上的结果推导出来
-			dp[i][j] = dp[i-1][j] + dp[i][j-1]
-		}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, uniquePaths(test.m, test.n))
+			assert.Equal(t, test.want, uniquePathsByDFS(test.m, test.n))
+		})
 	}
-	return dp[m-1][n-1]
 }

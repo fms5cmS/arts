@@ -1,6 +1,7 @@
 package dpRela
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -39,6 +40,36 @@ func fibSimple(n int) int {
 }
 
 func TestFib(t *testing.T) {
-	t.Log(fib(5))
-	t.Log(fibSimple(5))
+	tests := []struct {
+		name string
+		n    int
+		want int
+	}{
+		{
+			name: "1",
+			n:    1,
+			want: 1,
+		},
+		{
+			name: "2",
+			n:    2,
+			want: 1,
+		},
+		{
+			name: "3",
+			n:    3,
+			want: 2,
+		},
+		{
+			name: "4",
+			n:    4,
+			want: 3,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, fib(test.n))
+			assert.Equal(t, test.want, fibSimple(test.n))
+		})
+	}
 }
