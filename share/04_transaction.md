@@ -183,7 +183,7 @@ Redis 并没有提供事务的回滚机制！
 
 ## 事务特性的支持
 
-Redis 的事务无法完全保证事务的原子性！
+Redis 的事务无法完全保证事务的原子性！可以将所有的命令放入 Lua 脚本中。
 
 - 事务操作入队的命令存在错误（如语法错误，命令不存在）
     - 入队时 Redis 会保存并记录该错误，这是还是可以正常提交命令的，而到了实际执行时 Redis
@@ -236,8 +236,7 @@ $ EXEC # 如果在事务期间上面监控的任何一个 key 被其他 Client �
 为了应用分布式环境中的复杂场景，分布式事务无法保证 ACID 中的强一致性(C)，于是出现了 BASE 理论，其关键点在于使用最终一致性代替了强一致性！
 
 > 基本可用（Basically Available）：分布式系统在出现故障的时候，允许损失部分可用性，即保证核心可用；
-> 软状态（Soft state）：允许系统存在中间状态，而该中间状态不会影响系统整体可用性；
-> 分布式存储中一般一份数据至少会有三个副本，允许不同节点间副本同步的延时就是软状态的体现。
+> 柔性状态（Soft state）：允许系统存在中间状态，而该中间状态不会影响系统整体可用性；如数据库读写分离，主库向从库同步时会有一个延时，就是一种柔性状态
 > 最终一致性（Eventually consistent）：系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。
 
 分布式事务的实现：
@@ -245,6 +244,8 @@ $ EXEC # 如果在事务期间上面监控的任何一个 key 被其他 Client �
 - 基于 XA 协议的二阶段提交协议方法，强一致性，遵从 ACID 理论
 - 三阶段提交协议方法，强一致性，遵从 ACID 理论
 - 基于消息的最终一致性方法，最终一致性，遵从 BASE 理论
+
+![](../images/transaction.jpg)
 
 ## 2PC
 
@@ -254,18 +255,54 @@ XA 是一个分布式事务协议，规定了事务管理器和资源管理器�
 
 2PC 的执行过程分为投票(Voting)、提交(Commit) 两个阶段。
 
-1. 
+- Voting：Coordinator 向 Cohort 发起执行操作的 CanCommit 请求，并等待 Cohort 的响应。Cohort 收到请求后，执行请求中的事务操作，将操作信息记录到事务日志中但不提交（即不会修改 DB 中的数据），Cohort 执行成功向 Coordinator 发送 "Yes"，不成功则发送 "No"。
+- Commit：所有 Cohort 都返回结果后，进入 Commit 阶段，Coordinator 根据所有参与者返回的信息向 Cohort 发送 DoCommit 或 DoAbort 指令，规则如下
+  - Coordinator 收到的都是 "Yes"，则向所有 Cohort 发送 "DoCommit"，Cohort 收到 "DoCommit" 消息后，完成剩余操作（如修改 DB 中数据）并释放资源（整个事务过程中占用的资源），然后向 Coordinator 返回 "HaveCommitted" 消息
+  - Coordinator 收到的消息中包含 "No"，则向所有 Cohort 发送 "DoAbort"，此时 Voting 阶段发送 "Yes" 的消息的 Cohort 会根据之前执行操作的事务日志对操作进行回滚，然后所有 Cohort 向 Coordinator 发送 "HaveCommitted" 消息
+  - Coordinator 收到来自所有 Cohort 的 "HaveCommitted" 消息后，意味着整个事务结束了  
 
+2PC 尽量保证了数据的强一致性，但有以下几个问题：
 
+- 同步阻塞：执行过程中，所有参与节点都被事务阻塞，所以不支持高并发场景
+- 单点故障：一旦 Coordinator 发生故障，整个系统都处于停滞阶段
+- 数据不一致：Commit 阶段，当 Coordinator 发送 "DoCommit" 请求时，如果发生局部网络异常，或 Cohort 发生了故障，就会导致只有一部分 Cohort 收到了请求并提交。
 
+## 3PC
 
+三阶段提交协议（Three-phase Commit Protocol，3PC），是 2PC 的改进。为了更好地处理 2PC 的同步阻塞和数据不一致问题，3PC 引入了**超时机制和准备阶段**。
 
+3PC 的执行过程分为 CanCommit、PreCommit、DoCommit 三个阶段。
 
+- CanCommit：Coordinator 向 Cohort 发送 "CanCommit"，询问是否可以执行事务提交操作，并等待 Cohort 的响应。Cohort 回复 "Yes" 或 "No"
+- PreCommit：Coordinator 收到所有 Cohort 回复后，根据回复情况决定是否可以进行 PreCommit 操作。该阶段保证了在 DoCommit 之前所有参与者状态一致。
+  - 都是 "Yes"，Coordinator 会执行事务的预执行
+    - Coordinator 向 Cohort 发送 PreCommit 请求，进入预提交阶段；Cohort 收到 PreCommit 请求执行事务操作，并将 Undo 和 Redo 信息记录到事务日志中，Cohort 成功执行则返回 Ack 响应
+  - 收到任意一个 "No" 或等待超时，就执行中断事务的操作
+    - Coordinator 向 Cohort 发送 "Abort" 消息，Cohort 收到 "Abort" 或超时后仍未收到 Coordinator 的消息，执行事务的中断操作
+- DoCommit：根据 PreCommit 阶段 Coordinator 发送的消息，进入提交或中断阶段
+  - 提交阶段
+    - Coordinator 收到所有 Cohort 的 Ack 响应，向所有 Cohort 发送 DoCommit 罅隙，开始执行提交阶段
+    - Cohort 收到 DoCommit 消息，正式提交，完成后释放锁住的资源，并向 Coordinator 发送 Ack 响应
+    - Coordinator 收到所有 Cohort 的 Ack 响应后，完成事务
+  - 中断阶段
+    - Coordinator 向所有 Cohort 发送 Abort 请求
+    - Cohort 收到 Abort 后，利用其在 PreCommit 阶段记录的 Undo 信息执行事务回滚操作，释放锁住的资源，并向 Coordinator 发送 Ack 响应
+    - Coordinator 收到所有 Cohort 的 Ack 响应后，执行事务的中断，并结束事务
 
+2PC 仅在 Coordinator 引入了超时机制，而 3PC 在 Coordinator 和 Cohort 都引入了超时机制，如果 Coordinator 或 Cohort 规定的时间内没有接收到来自其他节点的响应，就会根据当前的状态选择提交或者终止整个事务，从而减少了整个集群的阻塞时间，在一定程度上减少或减弱了 2PC 中出现的同步阻塞问题；
+引入了一个准备阶段，相当于预提交阶段，在这一阶段尽可能排除一些不一致的情况，保证在最后提交之前各参与节点的状态是一致的。
 
+3PC 仍存在数据不一致问题：如在 DoCommit 阶段，部分 Cohort 已经收到 Ack 开始提交，部分 Cohort 由于网络不同未收到，最终导致数据不一致。
 
+## 基于消息
 
+2PC 和 3PC 核心思想均是以集中式的方式实现分布式事务，这两种方法都存在两个共同的缺点，一是，同步执行，性能差；二是，数据不一致问题。
 
+基于消息的最终一致性方案，将需要分布式处理的事务通过消息或者日志的方式异步执行，消息或日志可以存到本地文件、数据库或消息队列中，再通过业务规则进行失败重试。
+
+该方案的事务处理，会引入消息中间件，用于在多个应用间进行消息传递。
+
+基于分布式消息的最终一致性方案采用消息传递机制，并使用异步通信的方式，避免了通信阻塞，从而增加系统的吞吐量。同时，这种方案还可以屏蔽不同系统的协议规范，使其可以直接交互。
 
 
 
