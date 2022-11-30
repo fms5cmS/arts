@@ -21,5 +21,24 @@
 
 假设 `coins = [5, 3], k = 11`，根据贪心，先挑面值最大的 5 放入组合中，还剩 6 需要凑；再次贪心，放入 5 ...
 
+```go
+package main
 
+import "sort"
+
+func getMinCoinCount(coins []int, k int) int {
+    total, count := k, 0
+    length := len(coins)
+    sort.Ints(coins)
+    for i := length - 1; i >= 0; i-- {
+        curCount := total / coins[i] // 计算当前面值最多可以放几个
+        total -= curCount * coins[i] // 计算余额
+        count += curCount
+        if total == 0 {
+            return count
+        }
+    }
+    return -1 // 未凑出
+}
+```
 
