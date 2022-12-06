@@ -1,15 +1,15 @@
 package dpRela
 
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 // 找是否可以将这个数组分割成两个子集，使得两个子集的元素和相等
-// 所以，只要找到集合里能够出现 sum / 2 的子集总和，就算是可以分割成两个相同元素和子集了。
-// 类比 01 背包问题：背包容量 sum/2，要放入的商品为 nums 元素的值，背包中每个元素不可重复放入
+// dp 数组，容量为 i 的背包，放入的子集之和的最大值为 dp[i]
+// dp[i] == i 判断容量为 i 的背包是否装满，如 nums = [1, 5, 11, 5]，dp[7] 只能装 6（放入了 1 和 5），此时背包就是未装满
 func canPartition(nums []int) bool {
 	sum := 0
-	// 1. dp 数组，dp[i] 代表容量为 i 的背包，最大可以凑成 i 的子集之和为dp[i]
-	// 题目中：1 <= nums.length <= 200 且 1 <= nums[i] <= 100
-	// 总和不会大于 20000，背包最大容量为其一半 10001 即可
-	// 3. 初始化
-	dp := make([]int, 10001)
 	// 计算背包最大容量
 	for _, num := range nums {
 		sum += num
@@ -19,12 +19,65 @@ func canPartition(nums []int) bool {
 		return false
 	}
 	target := sum >> 1
-	// 4. 遍历顺序
-	for _, num := range nums {
-		for j := target; j >= num; j-- {
-			// 2. 递推公式
-			dp[j] = maxOf2Ints(dp[j], dp[j-num]+num)
+	// dp 数组初始化
+	dp := make([]int, target+1)
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
+	for _, num := range nums { // 遍历物品
+		for j := target; j >= num; j-- { // 遍历背包，倒序遍历是为了保证当前物品仅会被放入一次
+			// 递推公式
+			dp[j] = max(dp[j], dp[j-num]+num)
 		}
 	}
 	return dp[target] == target
+}
+
+func canPartition2(nums []int) bool {
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	if sum&1 == 1 {
+		return false
+	}
+	sum /= 2
+	dp := make([]bool, sum+1)
+	dp[0] = true
+	for _, num := range nums {
+		for i := sum; i > 0; i-- {
+			if i >= num {
+				dp[i] = dp[i] || dp[i-num]
+			}
+		}
+	}
+	return dp[sum]
+}
+
+func TestCanPartition(t *testing.T) {
+	tests := []struct {
+		name string
+		nums []int
+		want bool
+	}{
+		{
+			name: "1",
+			nums: []int{1, 5, 11, 5},
+			want: true,
+		},
+		{
+			name: "2",
+			nums: []int{1, 2, 3, 5},
+			want: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, canPartition(test.nums))
+			assert.Equal(t, test.want, canPartition2(test.nums))
+		})
+	}
 }
