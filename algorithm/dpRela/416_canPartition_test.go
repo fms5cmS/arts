@@ -1,6 +1,7 @@
 package dpRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -21,16 +22,11 @@ func canPartition(nums []int) bool {
 	target := sum >> 1
 	// dp 数组初始化
 	dp := make([]int, target+1)
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
 	for _, num := range nums { // 遍历物品
 		for j := target; j >= num; j-- { // 遍历背包，倒序遍历是为了保证当前物品仅会被放入一次
 			// 递推公式
-			dp[j] = max(dp[j], dp[j-num]+num)
+			// dp[j] 代表不放入当前物品，dp[j-num]+num 代表放入当前物品
+			dp[j] = utils.Max(dp[j], dp[j-num]+num)
 		}
 	}
 	return dp[target] == target

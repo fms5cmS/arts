@@ -1,6 +1,7 @@
 package dpRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -19,17 +20,10 @@ func integerBreak(n int) int {
 			// 2. 递推公式
 			// i 拆分为 i-j、j，其乘积为 (i-j)*j    这是拆分为两个正整数相乘
 			// i 拆分为 j、(i-j) 拆分的结果，其乘积为 dp[i-j]*j    这是拆分为两个及两个以上的正整数相乘
-			dp[i] = maxOf2Ints(dp[i], maxOf2Ints((i-j)*j, dp[i-j]*j))
+			dp[i] = utils.Max(dp[i], utils.Max((i-j)*j, dp[i-j]*j))
 		}
 	}
 	return dp[n]
-}
-
-func maxOf2Ints(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }
 
 func TestIntegerBreak(t *testing.T) {

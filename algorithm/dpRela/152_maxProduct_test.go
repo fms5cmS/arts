@@ -1,6 +1,7 @@
 package dpRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -13,25 +14,13 @@ func maxProduct(nums []int) int {
 	minF := make([]int, len(nums))
 	copy(maxF, nums)
 	copy(minF, nums)
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
-	min := func(x, y int) int {
-		if x < y {
-			return x
-		}
-		return y
-	}
 	for i := 1; i < len(nums); i++ {
-		maxF[i] = max(maxF[i-1]*nums[i], max(nums[i], minF[i-1]*nums[i]))
-		minF[i] = min(minF[i-1]*nums[i], min(nums[i], maxF[i-1]*nums[i]))
+		maxF[i] = utils.Max(maxF[i-1]*nums[i], utils.Max(nums[i], minF[i-1]*nums[i]))
+		minF[i] = utils.Min(minF[i-1]*nums[i], utils.Min(nums[i], maxF[i-1]*nums[i]))
 	}
 	answer := maxF[0]
 	for i := 1; i < len(nums); i++ {
-		answer = max(answer, maxF[i])
+		answer = utils.Max(answer, maxF[i])
 	}
 	return answer
 }
@@ -39,23 +28,11 @@ func maxProduct(nums []int) int {
 func maxProductSimple(nums []int) int {
 	maxF, minF := nums[0], nums[0]
 	answer := nums[0]
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
-	min := func(x, y int) int {
-		if x < y {
-			return x
-		}
-		return y
-	}
 	for i := 1; i < len(nums); i++ {
 		mx, mn := maxF, minF // 这里必须使用临时变量
-		maxF = max(mx*nums[i], max(nums[i], mn*nums[i]))
-		minF = min(mn*nums[i], min(nums[i], mx*nums[i]))
-		answer = max(maxF, answer)
+		maxF = utils.Max(mx*nums[i], utils.Max(nums[i], mn*nums[i]))
+		minF = utils.Min(mn*nums[i], utils.Min(nums[i], mx*nums[i]))
+		answer = utils.Max(maxF, answer)
 	}
 	return answer
 }
