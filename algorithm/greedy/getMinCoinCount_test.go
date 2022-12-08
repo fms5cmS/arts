@@ -1,6 +1,7 @@
 package greedy
 
 import (
+	"arts/algorithm/utils"
 	"fmt"
 	"github.com/go-playground/assert/v2"
 	"sort"
@@ -118,21 +119,15 @@ func getMinCoinCountByDP(coins []int, k int) int {
 	for i := 1; i < len(dp); i++ {
 		dp[i] = k + 1
 	}
-	min := func(x, y int) int {
-		if x < y {
-			return x
-		}
-		return y
-	}
 	for total := 1; total < len(dp); total++ {
 		for _, coin := range coins {
 			if total-coin < 0 {
 				continue
 			}
-			dp[total] = min(dp[total], dp[total-coin]+1)
+			dp[total] = utils.Min(dp[total], dp[total-coin]+1)
 		}
 	}
-	fmt.Println("dp = ",dp)
+	fmt.Println("dp = ", dp)
 	if dp[k] == k+1 {
 		return -1
 	}

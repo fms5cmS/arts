@@ -1,6 +1,7 @@
 package treeRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"testing"
@@ -29,14 +30,8 @@ func getHeight(root *TreeNode) int {
 	if math.Abs(float64(leftHeight-rightHeight)) > 1 { // 中
 		return -1
 	}
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
 	// 以当前节点为根节点的最大高度
-	return 1 + max(leftHeight, rightHeight)
+	return 1 + utils.Max(leftHeight, rightHeight)
 }
 
 func TestIsBalanced(t *testing.T) {

@@ -1,6 +1,7 @@
 package treeRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -40,16 +41,10 @@ func maxDepthByRecursion1(root *TreeNode) int {
 	}
 	leftDepth := maxDepthByRecursion1(root.Left)
 	rightDepth := maxDepthByRecursion1(root.Right)
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
-	return 1 + max(leftDepth, rightDepth)
+	return 1 + utils.Max(leftDepth, rightDepth)
 }
 
-//  前序遍历求树的最大深度
+// 前序遍历求树的最大深度
 func maxDepthByRecursion2(root *TreeNode) int {
 	if root == nil {
 		return 0
