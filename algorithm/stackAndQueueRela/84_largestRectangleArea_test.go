@@ -1,6 +1,9 @@
 package stackAndQueueRela
 
-import "testing"
+import (
+	"arts/algorithm/utils"
+	"testing"
+)
 
 // 暴力解法：
 // 遍历每一个高度，然后从当前高度分别向左右两侧扩散，寻找比当前高度高的，计算面积
@@ -22,16 +25,9 @@ func largestRectangleArea_force(heights []int) int {
 			right++
 		}
 		width := right - left + 1
-		ret = max(ret, curHeight*width)
+		ret = utils.Max(ret, curHeight*width)
 	}
 	return ret
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }
 
 // func largestRectangleArea(heights []int) int {

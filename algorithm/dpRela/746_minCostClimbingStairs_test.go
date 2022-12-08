@@ -1,6 +1,7 @@
 package dpRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -24,18 +25,12 @@ func minCostClimbingStairs(cost []int) int {
 	dp := make([]int, len(cost))
 	// 初始化 dp 数组
 	dp[0], dp[1] = cost[0], cost[1]
-	min := func(x, y int) int {
-		if x < y {
-			return x
-		}
-		return y
-	}
 	for i := 2; i < len(dp); i++ {
 		// 递推公式，这里还需要加上 cost[i]，代表从 i 阶离开消耗的体力值
-		dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+		dp[i] = cost[i] + utils.Min(dp[i-1], dp[i-2])
 	}
 	// fmt.Println(dp)
-	return min(dp[len(dp)-1], dp[len(dp)-2])
+	return utils.Min(dp[len(dp)-1], dp[len(dp)-2])
 }
 
 func TestMinCostClimbingStairs(t *testing.T) {
