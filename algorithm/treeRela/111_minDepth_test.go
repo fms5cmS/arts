@@ -1,6 +1,7 @@
 package treeRela
 
 import (
+	"arts/algorithm/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -54,13 +55,7 @@ func getDepthForMin(root *TreeNode) int {
 		return 1 + leftDepth
 	}
 	// 走到这里说明到了叶子节点
-	min := func(x, y int) int {
-		if x > y {
-			return y
-		}
-		return x
-	}
-	return 1 + min(leftDepth, rightDepth)
+	return 1 + utils.Min(leftDepth, rightDepth)
 }
 
 func TestMinDepth(t *testing.T) {
