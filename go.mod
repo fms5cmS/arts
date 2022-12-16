@@ -15,9 +15,6 @@ require (
 	go.uber.org/ratelimit v0.2.0
 	golang.org/x/sync v0.1.0
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858
-)
-
-require (
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
