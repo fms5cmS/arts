@@ -37,6 +37,8 @@ DP(Dynamic Programming)
 
 特殊：在 leetcode-152 题！
 
+遍历顺序由计算方向决定！
+
 # 题目特点
 
 - 计数
@@ -234,4 +236,10 @@ func wholeBag(weight, value []int, bagWeight int) int {
 
 647、53 注意两种 dp 数组的定义！
 
+# 子序列问题
 
+子序列的元素在原数组可以是不连续的，但是，需要保持相对顺序！
+
+如："abcde" 的子序列可以有 "ace"，但不会有 "aec"，因为子序列的元素在原数组中的相对顺序发生了改变。
+
+516
