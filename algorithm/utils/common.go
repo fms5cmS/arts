@@ -1,13 +1,15 @@
 package utils
 
-func Max(x, y int) int {
+import "golang.org/x/exp/constraints"
+
+func Max[T constraints.Ordered](x, y T) T {
 	if x > y {
 		return x
 	}
 	return y
 }
 
-func Min(x, y int) int {
+func Min[T constraints.Ordered](x, y T) T {
 	if x < y {
 		return x
 	}
