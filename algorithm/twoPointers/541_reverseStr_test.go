@@ -1,4 +1,4 @@
-package twoPointer
+package twoPointers
 
 // 当需要固定规律一段一段去处理字符串的时候，要想想在在for循环的表达式上做做文章。
 func reverseStr(s string, k int) string {

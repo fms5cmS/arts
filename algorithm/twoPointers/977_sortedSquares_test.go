@@ -1,4 +1,4 @@
-package twoPointer
+package twoPointers
 
 import (
 	"github.com/stretchr/testify/assert"

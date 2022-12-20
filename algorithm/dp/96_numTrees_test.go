@@ -1,3 +1,3 @@
 package dp
 
-// see ../treeRela/96
+// see ../tree/96

@@ -1,18 +1,60 @@
 package array
 
-// 283. Move zeros
-// boundary、explore 两个指针同时从左侧移动。boundary 作为 0 与非 0 元素的分界线
-// 当两者遇到 0 时，开始分离，boundary 不再移动，而 explore 继续移动
-// explore 遇到 0 时，与 boundary(此时指向 0) 交换元素，然后两个指针同时移动
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
 func moveZeroes(nums []int) {
-	boundary, explore := 0, 0
-	for explore < len(nums) {
-		if nums[explore] != 0 {
-			nums[boundary], nums[explore] = nums[explore], nums[boundary]
-			boundary++
-			explore++
-		} else {
-			explore++
+	slow, fast := 0, 0
+	for ; fast < len(nums); fast++ {
+		if nums[fast] != 0 {
+			nums[slow] = nums[fast]
+			slow++
 		}
+	}
+	for ; slow < len(nums); slow++ {
+		nums[slow] = 0
+	}
+}
+
+func moveZeroes2(nums []int) {
+	lastNonZeroIndex, cur := 0, 0
+	for ; cur < len(nums); cur++ {
+		if nums[cur] != 0 {
+			nums[lastNonZeroIndex], nums[cur] = nums[cur], nums[lastNonZeroIndex]
+			lastNonZeroIndex++
+		}
+	}
+}
+
+func TestMoveZeros(t *testing.T) {
+	tests := []struct {
+		name string
+		nums []int
+		want []int
+	}{
+		{
+			name: "1",
+			nums: []int{0, 1, 0, 3, 12},
+			want: []int{1, 3, 12, 0, 0},
+		},
+		{
+			name: "2",
+			nums: []int{0},
+			want: []int{0},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			nums1, nums2 := make([]int, len(test.nums)), make([]int, len(test.nums))
+			copy(nums1, test.nums)
+			copy(nums2, test.nums)
+			moveZeroes(nums1)
+			assert.Equal(t, test.want, nums1)
+
+			moveZeroes2(nums2)
+			assert.Equal(t, test.want, nums2)
+		})
 	}
 }
