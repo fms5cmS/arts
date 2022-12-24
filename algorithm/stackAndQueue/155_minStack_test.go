@@ -2,7 +2,7 @@ package stackAndQueue
 
 // 155. 最小栈：设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
 type MinStack struct {
-	// 栈顶指针
+	// 栈顶指针，由于需要使用 top 来从两个栈的栈顶取值，所以需要保持两个栈的高度是一致的！
 	top int
 	// 存放元素、存放当前栈中的最小值
 	data, min []int
@@ -18,9 +18,10 @@ func ConstructorMinStack() MinStack {
 
 // 第一次压栈时，同时向 data 和 min 中压入第一个元素；
 // 其他时候，data 正常压栈，min 有所区别：
-//    比较 min 中栈顶元素与当前压入 data 中元素 X 的大小，
-//		1. 如果 X 较小，则向 min 中也压入 X
-//		2. 如果 min 的栈顶元素较小，则重复压入 min 的栈顶元素
+//
+//	   比较 min 中栈顶元素与当前压入 data 中元素 X 的大小，
+//			1. 如果 X 较小，则向 min 中也压入 X
+//			2. 如果 min 的栈顶元素较小，则重复压入 min 的栈顶元素
 func (this *MinStack) Push(x int) {
 	this.top++
 	this.data = append(this.data, x)
