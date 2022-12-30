@@ -15,3 +15,5 @@ LRU 缓存：integration/146_lru_test.go
 升维：跳表
 
 数学归纳法 -> 动态规划？
+
+固定中间位置，两侧边界向两侧扩散：stackAndQueue/84 的暴力解法
