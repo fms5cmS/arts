@@ -1,4 +1,4 @@
-package stackAndQueue
+package slideWindow
 
 import (
 	"github.com/stretchr/testify/assert"
