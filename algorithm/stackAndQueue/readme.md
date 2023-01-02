@@ -11,4 +11,4 @@ Golang 中并未实现 Stack 和 Queue，可以通过 slice 来进行模拟，�
 
 单调栈的特殊使用：84
 
-单调队列的使用：239
+单调队列的使用：slideWindow/239
