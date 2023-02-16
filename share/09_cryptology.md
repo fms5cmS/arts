@@ -57,6 +57,7 @@
 AES(Advanced Encrytion Standard) 加密算法，常用填充算法为 PKCS7，常用分组工作模式为 GCM(Galois/Counter Mode)。
 
 > GCM 即 CTR + GMAC，在 CTR 加密的基础上增加 GMAC 的特性，解决了 CTR 不能对加密消息进行完整性校验的问题。
+> 
 > GMAC 利用伽罗华域（Galois Field，GF，有限域）乘法运算来计算消息的 MAC 值（消息认证码）。
 
 AES 的分组长度固定为 128 位（16字节），AES 涉及 4 种操作：字节替代(SubBytes)、行移位(ShiftRows)、列混淆(MixColumns) 和轮密钥加(AddRoundKey)，加解密需要经过多轮操作，密钥长度不同，轮数不同：
@@ -167,6 +168,7 @@ GCM(Galois/Counter Mode) 是一种认证加密方式的实现。GCM 中使用分
 消息认证码无法"对第三方认证"、"防止抵赖"。解决这两个问题都需要用到数字签名！
 
 > 因为消息认证码中用到的密钥是共享密钥，通信双方都有这个密钥，所以对第三方无法证明消息到底出自双方中的哪一方。
+> 
 > 因为消息认证码的共享密钥双方都有，无法判断消息是发自于哪一方。所以消息认证码无法防止否认(NonRepudiation)。
 
 ## 数字签名

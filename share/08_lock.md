@@ -55,7 +55,9 @@ sessionA 先启动，对 table 表加一个 MDL 读锁，而 sessionB 由于需�
 之后的 sessionD 需要申请 MDL 读锁，也会被 sessionC 阻塞！如果该表查询语句频繁，且客户端有重试机制（超时后会再起一个 session 再请求），这个库的线程很快就会用完。
 
 > 事务中的 MDL 锁，在语句执行开始时申请，但是语句结束后不会马上释放，而是等到事务提交后再提交。
+> 
 > 在 MySQL 的 information_schema 库的 innodb_trx 表中，可以查到当前执行中的事务。
+> 
 > 如果要做 DDL 变更的表刚好有长事务在执行，需要考虑先暂停 DDL 或 kill 掉这个长事务
 
 那么，如何安全地给小表加字段？
@@ -78,7 +80,9 @@ MySQL 插入数据时，自增列的值可以不指定，MySQL 会自动填充�
 - innodb_autoinc_lock_mode=1，以上方式混用，插入记录的数量确定时使用轻量级锁，否则使用表锁
 
 > MySQL5.7 及之前版本，自增值保存在内存中，没有持久化。
+> 
 > 如果一个表当前数据行里最大的 id 是 10，内存中记录的 AUTO_INCREMENT=11。这时删除 id=10 的行，AUTO_INCREMENT 还是 11。但如果马上重启实例，重启后这个表的 AUTO_INCREMENT 就会变成 10。
+> 
 > MySQL8.0 起，将自增值的变更记录在了 redo log 中，重启的时候依靠 redo log 恢复重启之前的值
 
 唯一键冲突、事务回滚会导致自增 id 不连续：
@@ -188,7 +192,9 @@ Mutex 是一个有状态的对象，它的 state 字段记录这个锁的状态�
 这种场景下也容易导致死锁，可以提前通过 Go 的 vet 工具来检测是否进行了 Mutex 复制的问题
 
 > sync 包下的同步原语都是不允许复制的！
+> 
 > vet 工具会检测所有实现了 `Locker` 接口的类型，分析函数调用、range 遍历、复制、声明、函数返回值等位置，有没有锁的值 copy 的情景，以此来判断有没有问题。
+> 
 > sync 包下不需要实现 `Locker` 接口功能的类型，如 WaitGroup、Pool、Cond 则是通过在结构体中内嵌了 noCopy 类型，该类型是一个 `Locker` 接口的空实现类型，这样的话，WaitGroup 类型也相当于实现了 `Locker` 接口
 
 - 易错场景三：重入
@@ -206,8 +212,11 @@ RWMutex 一般都是基于互斥锁、条件变量（condition variables）或�
 Go 标准库中的 RWMutex 设计是 Write-preferring 方案。一个正在阻塞的 Lock 调用会排除新的 reader 请求到锁。
 
 > 读写锁的设计和实现分为三种：
+> 
 > Read-preferring，读优先：可以提供很高的并发性，但是，在竞争激烈的情况下可能会导致写饥饿。
+> 
 > Write-preferring，写优先：如果已经有一个 writer 在等待请求锁的话，它会阻止新来的请求锁的 reader 获取到锁，所以优先保障 writer。当然，如果有一些 reader 已经请求了锁的话，新请求的 writer 也会等待已经存在的 reader 都释放锁之后才能获取。
+> 
 > 不指定优先级：这种设计比较简单，不区分 reader 和 writer 优先级
 
 ```go
