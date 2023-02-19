@@ -13,7 +13,7 @@ type Subject interface {
 }
 
 type Observer interface {
-	Update(msg string)
+	Read(msg string)
 }
 
 type Publisher struct {
@@ -26,25 +26,25 @@ func (p *Publisher) Subscribe(observer Observer) {
 
 func (p *Publisher) Notify(msg string) {
 	for _, observer := range p.observers {
-		observer.Update(msg)
+		observer.Read(msg)
 	}
 }
 
 type Subscriber1 struct{}
 
-func (s *Subscriber1) Update(msg string) {
-	fmt.Println("Observer1: ", msg)
+func (s *Subscriber1) Read(msg string) {
+	fmt.Println("Observer1 read: ", msg)
 }
 
 type Subscriber2 struct{}
 
-func (s *Subscriber2) Update(msg string) {
-	fmt.Println("Observer2: ", msg)
+func (s *Subscriber2) Read(msg string) {
+	fmt.Println("Observer2 read: ", msg)
 }
 
 func TestObserverPattern(t *testing.T) {
-	publisher := &Publisher{}
-	publisher.Subscribe(&Subscriber1{})
-	publisher.Subscribe(&Subscriber2{})
-	publisher.Notify("publish event test")
+	trafficSubjectPublisher := &Publisher{}
+	trafficSubjectPublisher.Subscribe(&Subscriber1{})
+	trafficSubjectPublisher.Subscribe(&Subscriber2{})
+	trafficSubjectPublisher.Notify("publish traffic message, xxx.")
 }
