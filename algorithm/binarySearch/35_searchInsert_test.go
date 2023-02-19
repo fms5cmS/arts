@@ -1,7 +1,7 @@
 package binarySearch
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -62,6 +62,41 @@ func searchInsert2(nums []int, target int) int {
 }
 
 func TestSearchInsert(t *testing.T) {
-	fmt.Println(searchInsert([]int{1, 3, 5, 6}, 5))
-	fmt.Println(searchInsert([]int{1, 3, 5, 6}, 4))
+	tests := []struct {
+		name   string
+		nums   []int
+		target int
+		want   int
+	}{
+		{
+			name:   "1",
+			nums:   []int{1, 3, 5, 6},
+			target: 5,
+			want:   2,
+		},
+		{
+			name:   "2",
+			nums:   []int{1, 3, 5, 6},
+			target: 2,
+			want:   1,
+		},
+		{
+			name:   "3",
+			nums:   []int{1, 3, 5, 6},
+			target: 7,
+			want:   4,
+		},
+		{
+			name:   "4",
+			nums:   []int{1, 3, 5, 6},
+			target: 0,
+			want:   0,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, searchInsert(test.nums, test.target))
+			assert.Equal(t, test.want, searchInsert1(test.nums, test.target))
+		})
+	}
 }

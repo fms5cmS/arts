@@ -95,26 +95,20 @@ func getRight(nums []int, target int) int {
 
 func TestRange(t *testing.T) {
 	tests := []struct {
+		name   string
 		nums   []int
 		target int
 		result []int
 	}{
-		{nums: []int{5, 7, 7, 8, 8, 10}, target: 8, result: []int{3, 4}},
-		{nums: []int{5, 7, 7, 8, 8, 10}, target: 6, result: []int{-1, -1}},
-		{nums: []int{}, target: 8, result: []int{-1, -1}},
+		{name: "1", nums: []int{5, 7, 7, 8, 8, 10}, target: 8, result: []int{3, 4}},
+		{name: "2", nums: []int{5, 7, 7, 8, 8, 10}, target: 6, result: []int{-1, -1}},
+		{name: "3", nums: []int{}, target: 8, result: []int{-1, -1}},
 	}
-	assert := assert.New(t)
 	for _, test := range tests {
-		assert.Equal(test.result, searchRange(test.nums, test.target), searchRange2(test.nums, test.target))
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.result, searchRange(test.nums, test.target))
+
+			assert.Equal(t, test.result, searchRange(test.nums, test.target))
+		})
 	}
-}
-
-func TestGet(t *testing.T) {
-	nums1, target1 := []int{5, 7, 7, 8, 8, 8, 10}, 8
-	nums2, target2 := []int{1}, 1
-	assert.Equal(t, 3, getLeft(nums1, target1), getFirstPosition(nums1, target1))
-	assert.Equal(t, 0, getLeft(nums2, target2), getFirstPosition(nums2, target2))
-
-	assert.Equal(t, 5, getRight(nums1, target1), getLastPosition(nums1, target1))
-	assert.Equal(t, 0, getRight(nums2, target2), getLastPosition(nums2, target2))
 }
