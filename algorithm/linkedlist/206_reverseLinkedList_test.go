@@ -11,6 +11,7 @@ func reverseList(head *ListNode) *ListNode {
 		return head
 	}
 	var pre *ListNode = nil
+	// 注意这里的循环条件是 head，而非 head.Next！！
 	for head != nil {
 		tmp := head.Next
 		head.Next = pre // 反转

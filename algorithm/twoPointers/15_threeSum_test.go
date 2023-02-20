@@ -18,11 +18,11 @@ func threeSum(nums []int) [][]int {
 	result := make([][]int, 0)
 	// 由于是返回值而非索引，所以可以对数组进行排序简化计算
 	sort.Ints(nums)
-	for i, num := range nums {
-		// 最小值都大于 0 的话，后面一定没有解了
-		if num > 0 {
-			return result
-		}
+	// 如果最小值大于 0 或 最大值小于 0，都没有结果
+	if nums[0] > 0 || nums[len(nums)-1] < 0 {
+		return result
+	}
+	for i := range nums {
 		// 对 a 去重
 		if i > 0 && nums[i] == nums[i-1] {
 			continue
