@@ -45,15 +45,19 @@ Consumer 无需关注服务发现的具体细节，只需要向 LB 发送请求�
 
 Pod 之间是可以通过 IP 进行通信的，但是，Pod 的 IP 是不稳定的，假设 Pod 副本数为 2，删除其中一个 Pod 后，ReplicaSet 会重新创建一个 Pod，IP 地址和之间的就不是同一个了。
 
-借鉴 DNS 解析域名得到 IP 地址的思想，K8s 通过 Service 来解决这一问题。
+借鉴 DNS 解析域名得到 IP 地址的思想，K8s 通过 Service 对象来解决这一问题。
 
-Service 会将一组来自同一个 ReplicaSet 创建的 Pod 组合在一起，并提供 DNS 的访问能力，这样 Pod 直接就可以通过 Service 域名来进行访问了。
+> K8s 内还有 CoreDNS，CoreDNS 包含了一个内存态的 DNS 以及控制器。控制器监听 Service 和 Endpoint 的变化，并配置 DNS，客户端 Pod 在进行域名解析时，从 CoreDNS 中查询服务对应的地址记录。
 
-> Service IP 是稳定的，在 Service 的配置文件中 metadata.name 就是 Service 的域名
+当 Service 的 selector 不为空时，Kubernetes Endpoint Controller 会侦听服务创建事件，创建与 Service 同名的 Endpoint 对象。而 Service 的 selector 所选中的所有 PodIP 都会被配置到 Endpoint 对象的 addresses 属性中（尚未 Ready 的 Pod，其 IP 会保存在 notReadyAddresses 属性中，代表不能作为流量转发的目标），所以，Endpoint 对象相当于记录了 Service 和它后面对应的那些 PodIP 的表。
+
+Endpoint 会将这些映射关系推送到每个节点上去，然后通过每个节点上的 kube-proxy 来做负载均衡。
+
+当集群规模很大（一个 Endpoint 对象会记录特别多的 PodIP），且变更会很频繁的时候，Pod 变更会引起 Endpoint 变更，Endpoint 变更会被推送到每个节点，导致持续会占用很多带宽，所以就有了 EndpointSlice 对象，用于对 Pod 较多的 Endpoint 进行切片，这样，每次只需推送变更了的 Endpoint 对象。
+
+> Service 的 selector 为空时，不会自动创建 Endpoint 对象，可以自己创建 Endpoint 对象，且 IP 可以任意配置。
 > 
-> Service 本身并未直接提供服务发现的能力，需要借助 Endpoints 来实现，Endpoints 记录了一组 Pod 的 IP 地址，Service 只需要查看自身所对应的 Endpoints 就能找到具体的 Pod。
-> 
-> Service 常用的类型是 ClusterIP。
+> kube-proxy 相当于在每个节点上都部署了一个 LB（负载均衡器）
 
 这种集群内部的 DNS 能力除了提供稳定的访问能力，还能提供负载均衡和会话保持的能力。
 
