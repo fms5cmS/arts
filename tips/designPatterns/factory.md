@@ -1,6 +1,8 @@
 
 工厂模式包含有三种：简单工厂、工厂方法、抽象工厂。
 
+[代码中公共类型定义](../examples/designPatterns/factoryBaseModel.go)
+
 - 简单工厂
 
 简单工厂[代码示例](../examples/designPatterns/simpleFactory_test.go)
