@@ -111,7 +111,7 @@ func (c *Client) Lock(ctx context.Context, key string, expiration time.Duration,
 	}
 }
 
-// SingleFlightLock 非常高冰发，且热点集中的情况下，结合 singleFlight 优化，即 本地所有的 goroutine 先竞争，胜利者再去抢全局的分布式锁
+// SingleFlightLock 非常高并发，且热点集中的情况下，结合 singleFlight 优化，即 本地所有的 goroutine 先竞争，胜利者再去抢全局的分布式锁
 func (c *Client) SingleFlightLock(ctx context.Context, key string, expiration time.Duration, retry RetryStrategy, timeout time.Duration) (*Lock, error) {
 	for {
 		flag := false // 标记是不是自己拿到了锁

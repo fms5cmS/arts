@@ -157,13 +157,13 @@ SELECT * FROM table WHERE key_part2 = 'a';
 -- 注：上面提到过 MySQL5.6 起默认开启了索引下推功能，那么可以直接利用联合索引中记录到的 key_part3 的信息过滤掉一部分不符合条件的记录，减少回表次数
 SELECT * FROM table WHERE key_part1 = 'a' AND key_part3 = 'c';
 
--- 由于联合索引先按照 key_part1 排序的，所以符合 key_part1<'a' 条件的索引记录肯定时相邻的
+-- 由于联合索引先按照 key_part1 排序的，所以符合 key_part1<'a' 条件的索引记录肯定是相邻的
 -- 对于符合 key_part1<'a' 的索引记录来说，不是直接按照 key_part2 排序的（只有 key_part1 等值查询时才是按 key_part2 排序的），即**根据 key_part2='a' 不能进一步减少扫描的记录数**
--- 所以，根据联合索引查询时，可以定位到符合 key_part1<'b' 的第一条记录，然后沿着记录所在的单向链表向后扫描，直到某条记录不符合 key_part1<'b'
--- 该索引扫描区间为 [-∞, 'b')
-SELECT * FROM table WHERE key_part1 < 'b' AND key_part2 = 'a';
+-- 所以，根据联合索引查询时，可以定位到符合 key_part1<'a' 的第一条记录，然后沿着记录所在的单向链表向后扫描，直到某条记录不符合 key_part1<'a'
+-- 该索引扫描区间为 [-∞, 'a')
+SELECT * FROM table WHERE key_part1 < 'a' AND key_part2 = 'a';
 
--- 类似上面，但在 key_part='b' 的时候，联合索引是按 key_part2 排序的，**可以利用其减少扫描记录数**，所以不需要将所有 key_part1='b' 的记录都扫描完
+-- 类似上面，但在 key_part1='b' 的时候，联合索引是按 key_part2 排序的，**可以利用其减少扫描记录数**，所以不需要将所有 key_part1='b' 的记录都扫描完
 -- 该语句搜索条件可以理解为 (key_part1<'b' AND key_part2='a') OR (key_part1='b' AND key_part2='a')
 -- 该索引的扫描区间为 ({-∞, -∞}, {'b', 'a'}]，说明： {key_part1, key_part2}
 SELECT * FROM table WHERE key_part1 <= 'b' AND key_part2 = 'a';

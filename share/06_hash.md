@@ -113,7 +113,7 @@ type hmap struct {
   noverflow  uint16         // 溢出桶的数量
   hash0      uint32         // hash seed，生成 hash 的随机数种子
   buckets    unsafe.Pointer // 指向一个 2^B 大小的桶数组
-  oldbuckets unsafe.Pointer // 扩容时用于保存之前的 buckets，大小为当前 buckets 的一半，数据全部转移到心桶后，旧桶会被清空
+  oldbuckets unsafe.Pointer // 扩容时用于保存之前的 buckets，大小为当前 buckets 的一半，数据全部转移到新桶后，旧桶会被清空
   nevacuate  uintptr        // 标识迁移进度，小于该地址的 buckets 已经完成迁移
   extra      *mapextra      // optional fields，存储溢出桶
 }
