@@ -32,6 +32,16 @@ type Client interface {
 	TransferFrom(ctx context.Context, arg TransformArg) (string, error)
 }
 
+func GetClient(chain string, rawUrl string) (Client, error) {
+	switch chain {
+	case "56", "0x38", "97", "0x61", // BSC，后面为测试网的 chainID
+		"137", "0x89", "80001", "0x13881": // Polygon，后面为两个测试网的 chainID
+		return NewEVMClient(rawUrl)
+	default:
+		return NewEVMClient(rawUrl)
+	}
+}
+
 func initLoopArg() *LoopArg {
 	return &LoopArg{
 		LoopNum:      defaultLoopNum,
@@ -41,12 +51,12 @@ func initLoopArg() *LoopArg {
 
 func checkTransferTx(tx *Transaction, checkArg CheckArg) error {
 	if checkArg.CheckFrom {
-		if !CompareAddresses(tx.From, checkArg.From) {
+		if !CompareEVMAddresses(tx.From, checkArg.From) {
 			return FromNotMatchErr
 		}
 	}
 	if checkArg.CheckTo {
-		if !CompareAddresses(tx.To, checkArg.To) {
+		if !CompareEVMAddresses(tx.To, checkArg.To) {
 			return ToNotMatchErr
 		}
 	}

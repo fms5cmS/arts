@@ -104,7 +104,7 @@ func (c *EVMClient) GetTransferTx(ctx context.Context, arg TransferTxArg) (*Tran
 		return tx, checkTransferTx(tx, arg.CheckArg)
 	}
 	// ERC20 的转账还需要解析 input data
-	if !CompareAddresses(tx.To, arg.TokenAddress) {
+	if !CompareEVMAddresses(tx.To, arg.TokenAddress) {
 		return nil, TokenNotMatchErr
 	}
 	contractAbi, err = abi.JSON(strings.NewReader(erc20.Erc20MetaData.ABI))
