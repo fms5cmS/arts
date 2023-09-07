@@ -8,7 +8,7 @@
 # Go 编程中的一些建议
 
 - 如果需要把数字转换成字符串，使用 `strconv.Itoa()` 比 `fmt.Sprintf()` 要快一倍左右。
-- 尽可能避免把 string 转成 `[]byte` ，这个转换会导致性能下降，可以[借助 unsafe 包来实现零拷贝转换](./examples/unsafe-test/example2_test.go);
+- 尽可能避免把 string 转成 `[]byte` ，这个转换会导致性能下降，可以[借助 unsafe 包来实现零拷贝转换](examples/unsafeTest/example2_test.go);
 - 如果在 for-loop 里对某个 Slice 使用 `append()`，请先把 Slice 的容量扩充到位，这样可以避免内存重新分配以及系统自动按 2 的 N 次方幂进行扩展但又用不到的情况，从而避免浪费内存；
 - 使用 `StringBuffer` 或是 `StringBuild` 来拼接字符串，性能会比使用 `+` 或 `+=` 高三到四个数量级；
 - 尽可能使用并发的 goroutine，然后使用 `sync.WaitGroup` 来同步分片操作；

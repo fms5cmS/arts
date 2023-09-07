@@ -5,6 +5,6 @@ unsafe 包提供了两个能力：
 
 > uintptr 没有指针的语义，因此 uintptr 指向的对象会被 gc 回收；而 unsafe.Pointer 有指针语义，可以保护它指向的对象在"有用"的时候不会被 gc。
 
-- [利用 unsafe 修改私有成员](./examples/unsafe-test/example1_test.go)
+- [利用 unsafe 修改私有成员](examples/unsafeTest/example1_test.go)
 
-- [实现字符串和 byte 切片的零拷贝转换](./examples/unsafe-test/example2_test.go)
+- [实现字符串和 byte 切片的零拷贝转换](examples/unsafeTest/example2_test.go)
