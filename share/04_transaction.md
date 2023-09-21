@@ -13,7 +13,7 @@
 
 MySQL 的事务是在引擎层实现的。以下如不特殊说明均是指 InnoDB 存储引擎下的特性和实现！！
 
-InnoDB 引擎通过[ redolog 的 crash-safe 能力](./05_persistence.md#wal-以及-redolog-的-crash-safe-能力)以及[两阶段提交](./05_persistence.md#两阶段提交)保证了事务的持久性！
+InnoDB 引擎通过 [redolog 的 crash-safe 能力](./05_persistence.md#wal-以及-redolog-的-crash-safe-能力)以及[两阶段提交](./05_persistence.md#两阶段提交)保证了事务的持久性！
 
 ## 事务的隔离性
 
