@@ -12,6 +12,7 @@
 | biz     | 业务相关知识记录   |
 | scripts | 脚本记录（todo） |
 | summary | 代码汇总       |
+| books   | 书籍阅读       |
 
 算法刷题
 

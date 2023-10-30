@@ -81,16 +81,16 @@ func getLeft(nums []int, target int) int {
 
 // 寻找右边界
 func getRight(nums []int, target int) int {
-	left, right := 0, len(nums)-1
-	for left <= right {
+	left, right := 0, len(nums)
+	for left < right {
 		mid := left + (right-left)>>1
 		if nums[mid] <= target {
 			left = mid + 1
 		} else {
-			right = mid - 1
+			right = mid
 		}
 	}
-	return right
+	return left - 1
 }
 
 func TestRange(t *testing.T) {
@@ -108,7 +108,7 @@ func TestRange(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			assert.Equal(t, test.result, searchRange(test.nums, test.target))
 
-			assert.Equal(t, test.result, searchRange(test.nums, test.target))
+			assert.Equal(t, test.result, searchRange2(test.nums, test.target))
 		})
 	}
 }
