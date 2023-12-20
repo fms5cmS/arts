@@ -13,6 +13,7 @@
 | scripts | 脚本记录（todo） |
 | summary | 代码汇总       |
 | books   | 书籍阅读       |
+| libs    | 包阅读        |
 
 算法刷题
 
