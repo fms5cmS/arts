@@ -1,4 +1,4 @@
-Go 内置库 errors
+Go1.21.5 内置库 errors
 
 # Wrapper
 
@@ -42,7 +42,7 @@ Go 1.13 向 `errors` 和 `fmt` 包中引入了一种新特性用于简化 error(
 
 **常犯的一个错误就是：使用一个 error 类型的变量作为第二个参数**！见[代码示例 TestAsInvalid](./isAs_test.go)
 
-# errors.join
+# errors.Join()
 
 项目中有时会处理多个 error：
 
