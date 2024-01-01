@@ -27,7 +27,7 @@ abigen --abi=./ERC20.abi --pkg=erc20 --out=ERC20.go
 ```shell
 # 根据只能合约 SimpleAuction.sol 生成 BIN 文件，输出文件的目录为 .
 solc --bin ./SimpleAuction.sol -o . 
-# 利用 abigen 工具，根据 ABI 文件、BIN 文件生成 Go 合约文件
+# 利用 abigen 工具，根据 ABI 文件、bin 文件编译生成 Go 合约文件，指定 Go 文件的包名、结构体名称、位置及文件名
 # 由于同时引入了 BIN 文件，所以 Go 合约文件中会包含合约的部署方法（方法名以 Deploy 作为前缀）
 abigen --abi=./SimpleAuction.abi --bin=./SimpleAuction.bin --pkg=contract --type=simpleAuction --out=../simpleAuction.go
 ```
