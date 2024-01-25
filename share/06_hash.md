@@ -258,3 +258,21 @@ Go 中还有一个溢出桶的概念，在进行赋值操作时，如果桶中�
 - 找到目标桶 b，计算高 8 位 hash
 - 遍历目标桶及其溢出桶，找到要删除的 key
 - 清空数据，同时将当前对应的 tophash 值设置为 `emptyOne`，如果发现后面没有元素，则将当前对应的 tophash 值设置为 `emptyRest`，并循环向上检查前一个元素是否为空，将连续没有元素的多个 tophash 都设置为 `emptyRest`
+
+## 线程安全
+
+如何实现线程安全的 map 类型？
+
+- 加读写锁，扩展 map，见 [RWMap](examples/hash/rwMap.go)
+  - 大量并发读写情况下，锁竞争会非常激烈
+- 分片加锁，更高效的并发 map，见 [concurrent map](https://github.com/orcaman/concurrent-map)
+  - 减少锁的粒度和锁的持有时间
+
+### sync.Map
+
+仅在以下两种场景使用 sync.Map 会比 map+RWMutex 性能高：
+
+1. 只会增长的缓存系统，一个 key 只写入一次但会被读很多次
+2. 多个 goroutine 为不相交的 key 集合进行读写操作
+
+生产中很少使用。

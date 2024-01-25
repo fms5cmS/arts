@@ -15,6 +15,8 @@
 | [books](#books)     | 书籍阅读         |
 | [libs](#libs)       | 包阅读          |
 
+[零散的记录](some.md)
+
 # share
 
 - [分布式锁](share/01_distributedLock.md)
