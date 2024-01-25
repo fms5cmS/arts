@@ -1,4 +1,4 @@
-原文链接：[CodeReviewComments](https://github.com/golang/go/wiki/CodeReviewComments)
+原文链接：[CodeReviewComments](https://go.dev/wiki/CodeReviewComments)
 
 一般而言，如果类型 `T` 的方法与其指针类型 `*T` 相关联，要避免对 `T` 类型的对象的复制。
 
