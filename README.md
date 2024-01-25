@@ -49,7 +49,8 @@
 # libs
 
 - [asynq 分布式任务队列](libs/asynq/README.md) 
-- [内置 errors 库](libs/builtin_errors/READEME.md) 
+- [内置 errors 包](libs/builtin_errors/READEME.md) 
+- [内置 sync 包](libs/builtin_sync/REDEME.md) 含 sync/atomic 包
 
 # review
 
@@ -57,6 +58,7 @@
 - [go 并发模型](review/concurrencyPatterns/README.md)
 - [第三方 errors 库](review/errors/READEME.md)
 - [goroutine 池](review/pool/workerPool.md)
+- [如果对齐的内存写入是原子的，为什么还需要 sync/atomic 包](review/whyNeedAtomicPackage/README.md)
 
 # summary
 
