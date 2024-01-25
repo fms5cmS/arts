@@ -1,5 +1,7 @@
 [AcWing](https://www.acwing.com/problem/)
 
+注意：LeetCode 提交代码时，最好不要使用全局变量，见 1373 题（可将 maxSum 替换为全局变量，提交时会有错误）！
+
 取数值各个位上的数，见 hash/202
 
 # 高频题目：
