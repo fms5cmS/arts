@@ -225,3 +225,5 @@ sync/atomic 包提供了一些实现原子操作的方法。
 - Int32
 - Pointer
 - Bool
+
+[如果内存对齐的写入是原子的，为什我们还需要 sync/atomic 包](../../review/whyNeedAtomicPackage/README.md)
