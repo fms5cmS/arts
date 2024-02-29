@@ -43,5 +43,18 @@ func TestTwoSum(t *testing.T) {
 	}
 	for _, test := range tests {
 		assert.Equal(t, test.output, twoSum(test.nums, test.target))
+		assert.Equal(t, test.output, twoSumForce(test.nums, test.target))
 	}
+}
+
+// 暴力解法 O(n^2)
+func twoSumForce(nums []int, target int) []int {
+	for i, a := range nums {
+		for j := i + 1; j < len(nums); j++ {
+			if a+nums[j] == target {
+				return []int{i, j}
+			}
+		}
+	}
+	return nil
 }

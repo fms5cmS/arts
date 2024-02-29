@@ -12,17 +12,17 @@ import (
 // 要想得到最大的面积，必须高增大，所以每次最小的高向内移动
 func maxArea(height []int) int {
 	left, right := 0, len(height)-1
-	maxArea := 0
+	maxAreaVal := 0
 	for left < right {
 		if height[left] < height[right] {
-			maxArea = utils.Max((right-left)*height[left], maxArea)
+			maxAreaVal = utils.Max((right-left)*height[left], maxAreaVal)
 			left++
 		} else {
-			maxArea = utils.Max((right-left)*height[right], maxArea)
+			maxAreaVal = utils.Max((right-left)*height[right], maxAreaVal)
 			right--
 		}
 	}
-	return maxArea
+	return maxAreaVal
 }
 
 func TestMaxArea(t *testing.T) {
