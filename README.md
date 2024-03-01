@@ -28,6 +28,17 @@
 - [锁](share/08_lock.md)：死锁、分布式锁、MySQL 的锁、Golang 的锁
 - [一致性&共识](share/12_consistency&consensus.md)
 
+# share
+
+- [分布式锁](share/01_distributedLock.md)
+- [限流](share/02_rateLimit.md)
+- [事务](share/04_transaction.md)：MySQL 事务、Redis 事务、分布式事务
+- [持久化](share/05_persistence.md)：MySQL 事务的持久性、Redis 持久化、
+- [哈希](share/06_hash.md)：内存结构&序列化方案、Redis 中的哈希表、Golang 的 map
+- [索引](share/07_index.md)：索引的常用数据类型、MySQl 的索引
+- [锁](share/08_lock.md)：死锁、分布式锁、MySQL 的锁、Golang 的锁
+- [一致性&共识](share/12_consistency&consensus.md)
+
 业务相关内容：
 
 - [短链接](share/03_shortURL.md)
@@ -51,6 +62,7 @@
 - [asynq 分布式任务队列](libs/asynq/README.md) 
 - [内置 errors 包](libs/builtin_errors/READEME.md) 
 - [内置 sync 包](libs/builtin_sync/REDEME.md) 含 sync/atomic 包
+- [内置 errors 库](libs/builtin_errors/READEME.md) 
 
 # review
 

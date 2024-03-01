@@ -73,6 +73,13 @@ func (o *Once) doSlow(f func()) {
   - Do 会被内联到具体的调用处，这样的话 doSlow 只有读到 done==0 的 goroutine 才会额外有 doSlow 的函数调用，一旦 done 置为 1 后，再调用的话就不会再有 doSlow 的函数调用了
   - 只有读到 done==0 goroutine 的函数调用次数是 1，读到 done==1 的goroutine 的函数调用次数是 0
 
+Go 1.21.0 中增加了三个 Once 相关的函数（不是 Once 的方法，位于 oncefunc.go 文件中）对 Once 进行了封装用于简化 sync.Once 的调用：
+
+- `OnceFunc(f func()) func()`：返回函数 g，多次调用 g 只会执行一次 f
+  - 如果 f 执行时 panic, 则后续调用函数 g 不会再执行 f,但是每次调用都会 panic
+- `OnceValue[T any](f func() T) func() T`：同上，且调用 g 返回的值为 f 执行后返回的值
+- `OnceValues[T1, T2 any](f func() (T1, T2)) func() (T1, T2)`：同上，多了一个返回值
+
 # sync.Pool
 
 sync.Pool 用于保存一组可独立访问的**临时**对象，可以创建池化的对象，但是，它池化的对象可能会无通知地被 GC 回收掉，这对于数据库等长连接场景是不合适的！！
@@ -164,7 +171,7 @@ Pool 最重要的两个字段是 local、victim。
 
 # sync.Map
 
-见[sync.Mao](../../share/06_hash.md#syncmap)
+见[sync.Map](../../share/06_hash.md#syncmap)
 
 # sync.Cond（很少用，很难掌握）
 
