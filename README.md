@@ -27,6 +27,7 @@
 - [索引](share/07_index.md)：索引的常用数据类型、MySQl 的索引
 - [锁](share/08_lock.md)：死锁、分布式锁、MySQL 的锁、Golang 的锁
 - [一致性&共识](share/12_consistency&consensus.md)
+- [池化技术](share/15_pool.md)
 
 业务相关内容：
 
@@ -58,7 +59,6 @@
 - [go 代码 review 建议](review/codeReviewComments/README.md)
 - [go 并发模型](review/concurrencyPatterns/README.md)
 - [第三方 errors 库](review/errors/READEME.md)
-- [goroutine 池](review/pool/workerPool.md)
 - [如果对齐的内存写入是原子的，为什么还需要 sync/atomic 包](review/whyNeedAtomicPackage/README.md)
 
 # summary
