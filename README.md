@@ -60,12 +60,14 @@
 - [go 并发模型](review/concurrencyPatterns/README.md)
 - [第三方 errors 库](review/errors/READEME.md)
 - [如果对齐的内存写入是原子的，为什么还需要 sync/atomic 包](review/whyNeedAtomicPackage/README.md)
+- [Go 读取大文件](review/readFile/README.md)
 
 # summary
 
 - [基于以太坊基础 api 的 go 访问接口](summary/blockchain/README.md)
 - [MD5 和 AES 加密使用示例](summary/encrypt/aes.go)
 - [接入聊天工具](summary/msg/README.md)
+- [读取文件的部分操作](summary/readFile/README.md)
 
 # tips
 
