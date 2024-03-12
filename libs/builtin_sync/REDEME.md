@@ -86,6 +86,8 @@ Go 1.21.0 中增加了三个 Once 相关的函数（不是 Once 的方法，位�
 
 如 buffer 池，[示例](./pool_test.go)
 
+在读取大文件时的使用，见 [Process 和 ProcessChunk](../../review/readFile/readBigLine.go)
+
 ## 实现
 
 ```go

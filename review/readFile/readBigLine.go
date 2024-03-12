@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestReadFileWithoutLine(t *testing.T) {
+func TestReadBigLine(t *testing.T) {
 	s := time.Now()
 	args := os.Args[1:]
 	if len(args) != 6 { // for format  LogExtractor.exe -f "From Time" -t "To Time" -i "Log file directory location"

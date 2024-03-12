@@ -1,7 +1,7 @@
 
 Reference:
 
-- 含换行符的文件
+- 可以整行写入内存
 
 [The One Billion Row Challenge in Go: from 1m45s to 3.4s in nine solutions](https://benhoyt.com/writings/go-1brc/)
 
@@ -11,7 +11,7 @@ Reference:
 
 [4 秒处理 10 亿行数据！ Go 语言的 9 大代码方案，一个比一个快](https://mp.weixin.qq.com/s/iylZAKZfxLL6SYruww_8zA)
 
-- 不含换行符的大文件
+- 整行不一定能写入内存
 
 [Reading 16GB File in Seconds, Golang](https://medium.com/swlh/processing-16gb-file-in-seconds-go-lang-3982c235dfa2)
 
@@ -37,4 +37,6 @@ solutions:
 
 注意：所有针对数据格式的优化都需要根据实际遇到的数据调整！
 
-[ReadNoLine](./readNoLine.go)，读取不含换行符的大文件，使用 bufio.NewReader() 将文件分块加载到内存中！
+一行文件太大时，无法一次性写入内存，可以分片处理。
+
+[readBigLine](./readBigLine.go)，读取不含换行符的大文件，使用 bufio.NewReader() 将文件分块加载到内存中！
