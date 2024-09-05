@@ -35,8 +35,8 @@ func GenerateMethodID(selector string) []byte {
 	return hash.Sum(nil)[:4]
 }
 
-// IsValidAddress validate hex address
-func IsValidAddress(iaddress interface{}) bool {
+// IsValidAddressByRegexp validate hex address
+func IsValidAddressByRegexp(iaddress interface{}) bool {
 	// 利用正则表达式判断地址是否符合以太坊地址格式
 	re := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
 	switch v := iaddress.(type) {

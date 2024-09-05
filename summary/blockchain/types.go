@@ -2,27 +2,8 @@ package blockchain
 
 import (
 	"github.com/shopspring/decimal"
-	"math"
 	"math/big"
 	"time"
-)
-
-var (
-	defaultEvmDecimals      int32 = 18
-	defaultEvmPaddedLength        = 32
-	defaultEvmApproveAmount       = ToWei(math.MaxInt64, defaultEvmDecimals)
-
-	defaultLoopInterval = 2 * time.Second
-	defaultLoopNum      = 30
-
-	evmZeroAddress                = "0x0"
-	evmNativeCurrencyTokenAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
-
-	/** ERC20 转账的函数签名信息 */
-	erc20TransferSelector   = "transfer(address,uint256)"
-	erc20transferMethodName = "transfer"
-	erc20TransferTo         = "to"
-	erc20TransferAmount     = "amount"
 )
 
 type BalanceArg struct {

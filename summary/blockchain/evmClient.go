@@ -322,7 +322,7 @@ func (c *EVMClient) Approve(ctx context.Context, arg ApproveArg) error {
 		err          error
 	)
 	if arg.Amount == nil {
-		arg.Amount = defaultEvmApproveAmount
+		arg.Amount = unlimitedApproveAmount
 	}
 	instance, err = erc20.NewErc20(tokenAddress, c.client)
 	if err != nil {
