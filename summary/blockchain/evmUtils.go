@@ -1,14 +1,18 @@
 package blockchain
 
 import (
+	"crypto/ecdsa"
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/shopspring/decimal"
 	"golang.org/x/crypto/sha3"
 	"math/big"
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // GetEVMExtraGasPricePercent 根据 chainID 获得 gasPrice 设置的增长倍数
@@ -31,8 +35,8 @@ func GenerateMethodID(selector string) []byte {
 	return hash.Sum(nil)[:4]
 }
 
-// IsValidAddress validate hex address
-func IsValidAddress(iaddress interface{}) bool {
+// IsValidAddressByRegexp validate hex address
+func IsValidAddressByRegexp(iaddress interface{}) bool {
 	// 利用正则表达式判断地址是否符合以太坊地址格式
 	re := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
 	switch v := iaddress.(type) {
@@ -89,4 +93,22 @@ func SigRSV(isig interface{}) ([32]byte, [32]byte, uint8) {
 	V := uint8(vI + 27)
 
 	return R, S, V
+}
+
+// LoadPrivateKey get *ecdsa.PrivateKey and address by private key string
+func LoadPrivateKey(privateKeyStr string) (*ecdsa.PrivateKey, common.Address, error) {
+	if strings.HasPrefix(privateKeyStr, "0x") {
+		privateKeyStr = privateKeyStr[2:]
+	}
+	privateKey, err := crypto.HexToECDSA(privateKeyStr)
+	if err != nil {
+		return nil, common.Address{}, fmt.Errorf("load PrivateKey: privateKey HexToECDSA failed: %w", err)
+	}
+	publicKey := privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		return nil, common.Address{}, fmt.Errorf("load PrivateKey: publicKey is not of type *ecdsa.PublicKey")
+	}
+	address := crypto.PubkeyToAddress(*publicKeyECDSA)
+	return privateKey, address, nil
 }
